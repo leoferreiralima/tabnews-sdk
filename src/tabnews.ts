@@ -1,18 +1,15 @@
 import { TabNewsConfig } from './interfaces';
 
 export class TabNews {
-  constructor(readonly config?: TabNewsConfig) {
-    if (!!config && !config.credentials) {
-      throw new Error(
-        `Missing Credentials. Pass it to the constructor like the example below:
-        \`new TabNews({
-            credential: {
-              email: 'your@email.com'
-              password: 'your_password'
-            }
-          );\``,
-      );
+  constructor(readonly config: TabNewsConfig = {}) {
+    if (!config.credentials) {
+      config.credentials = {};
     }
+
+    config.credentials.email =
+      config.credentials.email || process.env.TABNEWS_CREDENTIALS_EMAIL;
+    config.credentials.password =
+      config.credentials.password || process.env.TABNEWS_CREDENTIALS_PASSWORD;
 
     this.config = config;
   }
