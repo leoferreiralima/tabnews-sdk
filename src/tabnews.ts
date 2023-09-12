@@ -10,7 +10,5 @@ export class TabNews {
       config.credentials.email || process.env.TABNEWS_CREDENTIALS_EMAIL;
     config.credentials.password =
       config.credentials.password || process.env.TABNEWS_CREDENTIALS_PASSWORD;
-
-    this.config = config;
   }
 }
