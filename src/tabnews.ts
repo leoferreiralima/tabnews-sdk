@@ -1,7 +1,7 @@
 import { TabNewsConfig } from './interfaces';
 
 export class TabNews {
-  constructor(readonly config: TabNewsConfig = {}) {
+  constructor(readonly config: Partial<TabNewsConfig> = {}) {
     if (!config.credentials) {
       config.credentials = {};
     }

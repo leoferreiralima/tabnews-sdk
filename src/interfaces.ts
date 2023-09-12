@@ -1,5 +1,5 @@
 export interface TabNewsConfig {
-  credentials?: {
+  credentials: {
     email?: string;
     password?: string;
   };
