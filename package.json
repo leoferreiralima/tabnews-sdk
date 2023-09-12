@@ -2,12 +2,17 @@
   "name": "tabnews-sdk",
   "version": "1.0.0",
   "description": "Node.js library to interacte with TabNews API",
-  "main": "index.js",
+  "main": "build/src/index.js",
+  "typings": "build/src/index.d.ts",
+  "files": [
+    "build/"
+  ],
   "engines": {
     "node": ">=18"
   },
   "scripts": {
     "prepare": "husky install",
+    "build": "tsc -p .",
     "lint": "eslint .",
     "format": "prettier --write .",
     "commit": "cz",
@@ -31,6 +36,7 @@
   "devDependencies": {
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.7.0",
+    "@types/node": "^20.6.0",
     "@typescript-eslint/eslint-plugin": "^6.7.0",
     "@typescript-eslint/parser": "^6.7.0",
     "@vitest/coverage-v8": "^0.34.4",
