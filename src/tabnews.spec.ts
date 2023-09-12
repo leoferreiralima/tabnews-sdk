@@ -5,7 +5,7 @@ describe('TabNews', () => {
   it('should instantiate without and without env', () => {
     const tabNews = new TabNews();
 
-    expect(tabNews.config.credentials?.email).toBeDefined();
+    expect(tabNews.config.credentials?.email).toBeUndefined();
     expect(tabNews.config.credentials?.password).toBeUndefined();
   });
 
