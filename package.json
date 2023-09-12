@@ -1,0 +1,32 @@
+{
+  "name": "tabnews-sdk",
+  "version": "1.0.0",
+  "description": "Node.js library to interacte with TabNews API",
+  "main": "index.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "email": "leonardo@leoferreira.dev",
+    "name": "Leonardo Ferreira Lima"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leoferreiralima/tabnews-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/leoferreiralima/tabnews-sdk/issues"
+  },
+  "homepage": "https://github.com/leoferreiralima/tabnews-sdk#README",
+  "license": "MIT",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.7.0",
+    "@typescript-eslint/parser": "^6.7.0",
+    "eslint": "^8.49.0",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
+  }
+}
