@@ -49,7 +49,8 @@
     "lint-staged": "^14.0.1",
     "prettier": "^3.0.3",
     "typescript": "^5.2.2",
-    "vitest": "^0.34.4"
+    "vitest": "^0.34.4",
+    "vitest-fetch-mock": "^0.2.2"
   },
   "lint-staged": {
     "**/*.{js,ts,tsx}": [
@@ -62,5 +63,8 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "cross-fetch": "^4.0.0"
   }
 }

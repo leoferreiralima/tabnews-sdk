@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TabNews > Fetch with credentials > should throw error when credentials is not configured 1`] = `"Credendials is not configured, please set this to call this method"`;
