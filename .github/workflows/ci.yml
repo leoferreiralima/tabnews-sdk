@@ -36,6 +36,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - run: pnpm test
+      - run: pnpm test:coverage
         env:
           CI: true
+          
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
