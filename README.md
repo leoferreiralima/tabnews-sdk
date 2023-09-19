@@ -3,6 +3,7 @@
 # TabNews SDK
 
 [![CI](https://github.com/leoferreiralima/tabnews-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/leoferreiralima/tabnews-sdk/actions/workflows/ci.yml)
+[![Coverage](https://codecov.io/gh/leoferreiralima/tabnews-sdk/graph/badge.svg?token=1UWW7T20RY)](https://codecov.io/gh/leoferreiralima/tabnews-sdk)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=leoferreiralima_tabnews-sdk&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=leoferreiralima_tabnews-sdk)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=leoferreiralima_tabnews-sdk&metric=bugs)](https://sonarcloud.io/summary/new_code?id=leoferreiralima_tabnews-sdk)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=leoferreiralima_tabnews-sdk&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=leoferreiralima_tabnews-sdk)
