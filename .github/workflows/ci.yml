@@ -13,12 +13,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: pnpm
           
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
           run_install: false
+          version: 8
           
       - name: Get pnpm store directory
         shell: bash
@@ -36,6 +36,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - run: pnpm test
+      - run: pnpm test:coverage
         env:
           CI: true
+          
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
