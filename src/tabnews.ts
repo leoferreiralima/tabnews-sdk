@@ -20,9 +20,9 @@ export class TabNews {
     }
 
     config.credentials.email =
-      config.credentials.email || process.env.TABNEWS_CREDENTIALS_EMAIL;
+      config.credentials.email ?? process.env.TABNEWS_CREDENTIALS_EMAIL;
     config.credentials.password =
-      config.credentials.password || process.env.TABNEWS_CREDENTIALS_PASSWORD;
+      config.credentials.password ?? process.env.TABNEWS_CREDENTIALS_PASSWORD;
 
     this.headers = new Headers({
       'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ export class TabNews {
       ...options,
     };
 
-    return await this.fetchRequest(path, requestOptions);
+    return await this.fetchWithCredentials(path, requestOptions);
   }
 
   async post<T>({ path, body, ...options }: RequestConfig): Promise<T> {
@@ -89,9 +89,13 @@ export class TabNews {
     return await this.fetchRequest(path, requestOptions);
   }
 
-  async delete<T>({ path, body, ...options }: RequestConfig): Promise<T> {
+  async deleteWithCredentials<T>({
+    path,
+    body,
+    ...options
+  }: RequestConfig): Promise<T> {
     const requestOptions = {
-      method: 'POST',
+      method: 'DELETE',
       body: JSON.stringify(body),
       ...options,
     };

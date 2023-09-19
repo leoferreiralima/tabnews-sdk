@@ -3,14 +3,14 @@ import { TabNewsApiError } from './interfaces';
 export class TabNewsError extends Error implements TabNewsApiError {
   action: string;
   statusCode: number;
-  errorId?: string | undefined;
-  requestId?: string | undefined;
+  errorId?: string;
+  requestId?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: any;
-  errorLocationCode?: string | undefined;
-  key?: string | undefined;
-  type?: string | undefined;
-  databaseErrorCode?: string | undefined;
+  errorLocationCode?: string;
+  key?: string;
+  type?: string;
+  databaseErrorCode?: string;
 
   constructor(readonly tabNewsError: TabNewsApiError) {
     super(tabNewsError.message);
