@@ -40,12 +40,7 @@ jobs:
         env:
           CI: true
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2.0.2
-        with:
-          args: >
-            -Dsonar.organization=leoferreiralima
-            -Dsonar.projectKey=leoferreiralima_tabnews-sdk
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
