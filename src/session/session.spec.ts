@@ -58,6 +58,40 @@ describe('Session', () => {
     });
   });
 
+  describe('destroy', () => {
+    it('should destroy a session', async () => {
+      fetchMock.mockOnce(
+        JSON.stringify({
+          id: '123',
+          token: 'token123',
+          expires_at: '2023-10-12T11:56:13.378Z',
+          created_at: '2023-09-12T11:56:13.379Z',
+          updated_at: '2023-09-12T11:56:13.379Z',
+        }),
+      );
+
+      await tabNews.session.create();
+
+      fetchMock.mockOnce(
+        JSON.stringify({
+          id: '123',
+          expires_at: '2023-10-12T11:56:13.378Z',
+          created_at: '2023-09-12T11:56:13.379Z',
+          updated_at: '2023-09-12T11:56:13.379Z',
+        }),
+      );
+
+      const data = await tabNews.session.destroy();
+
+      expect(data).toMatchObject({
+        id: '123',
+        expires_at: '2023-10-12T11:56:13.378Z',
+        created_at: '2023-09-12T11:56:13.379Z',
+        updated_at: '2023-09-12T11:56:13.379Z',
+      });
+    });
+  });
+
   describe('session', () => {
     beforeEach(() => {
       vi.useFakeTimers();
@@ -67,8 +101,33 @@ describe('Session', () => {
       vi.useRealTimers();
     });
 
-    it('should return true if session is not setted', () => {
+    it('should return that session is expired', () => {
       expect(tabNews.session.isExpired()).toBe(true);
+    });
+
+    it('should return that no has session', () => {
+      expect(tabNews.session.hasSession()).toBe(false);
+    });
+
+    it('should return that no has session when it is destroyed', () => {
+      expect(tabNews.session.hasSession()).toBe(false);
+    });
+
+    it('should return that has session', async () => {
+      fetchMock.mockResponse(
+        JSON.stringify({
+          id: '123',
+          token: 'token123',
+          expires_at: '2023-10-12T11:56:13.378Z',
+          created_at: '2023-09-12T11:56:13.379Z',
+          updated_at: '2023-09-12T11:56:13.379Z',
+        }),
+      );
+
+      await tabNews.session.create();
+      await tabNews.session.destroy();
+
+      expect(tabNews.session.hasSession()).toBe(false);
     });
 
     it('should return false if current date is least than expires_at', async () => {
