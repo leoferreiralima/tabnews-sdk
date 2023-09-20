@@ -29,28 +29,24 @@ export class TabNews {
     });
   }
 
-  async fetchWithCredentials<T>(
+  async fetchRequest<T>(
     path: string,
-    options: Omit<RequestConfig, 'path'> = {},
-  ) {
-    if (!this.isCredentialsConfigured()) {
-      throw new Error(
-        `Credendials is not configured, please set this to call this method`,
-      );
-    }
+    { body, ...options }: Omit<RequestConfig, 'path'> = {},
+  ): Promise<T> {
+    const isCreateSession =
+      path.includes('/sessions') && 'POST' === options.method;
 
-    if (this.session.isExpired()) {
+    const shouldRenovateSession =
+      !isCreateSession &&
+      this.isCredentialsConfigured() &&
+      this.session.hasSession() &&
+      this.session.isExpired();
+
+    if (shouldRenovateSession) {
       const session = await this.session.create();
       this.headers.set('Cookie', `session_id=${session.token}`);
     }
 
-    return this.fetchRequest<T>(path, options);
-  }
-
-  async fetchRequest<T>(
-    path: string,
-    { body, ...options }: Omit<RequestConfig, 'path'>,
-  ): Promise<T> {
     const response = await fetch(`${baseUrl}${path}`, {
       headers: this.headers,
       body,
@@ -65,20 +61,6 @@ export class TabNews {
     return await response.json();
   }
 
-  async postWithCredentials<T>({
-    path,
-    body,
-    ...options
-  }: RequestConfig): Promise<T> {
-    const requestOptions = {
-      method: 'POST',
-      body: JSON.stringify(body),
-      ...options,
-    };
-
-    return await this.fetchWithCredentials(path, requestOptions);
-  }
-
   async post<T>({ path, body, ...options }: RequestConfig): Promise<T> {
     const requestOptions = {
       method: 'POST',
@@ -89,11 +71,7 @@ export class TabNews {
     return await this.fetchRequest(path, requestOptions);
   }
 
-  async deleteWithCredentials<T>({
-    path,
-    body,
-    ...options
-  }: RequestConfig): Promise<T> {
+  async delete<T>({ path, body, ...options }: RequestConfig): Promise<T> {
     const requestOptions = {
       method: 'DELETE',
       body: JSON.stringify(body),

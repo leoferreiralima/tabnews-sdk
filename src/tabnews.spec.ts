@@ -1,6 +1,6 @@
 import 'vitest-fetch-mock';
 
-import { expect, describe, it, vi, afterEach } from 'vitest';
+import { expect, describe, it, vi } from 'vitest';
 import { TabNews } from './tabnews';
 
 describe('TabNews', () => {
@@ -46,53 +46,166 @@ describe('TabNews', () => {
     expect(tabNews.config.credentials?.password).toBe('dummy_password');
   });
 
-  describe('Fetch with credentials', () => {
-    afterEach(() => {
-      fetchMock.resetMocks();
+  it('should not create a new session id when dont has session', async () => {
+    fetchMock.mockOnce(
+      JSON.stringify({
+        id: 'c569430f-d424-48f0-8c6e-6ad74c45743d',
+        expires_at: '2023-09-18T10:11:49.519Z',
+        created_at: '2023-09-19T10:11:49.519Z',
+        updated_at: '2023-09-19T10:16:36.987Z',
+      }),
+    );
+
+    const tabNews = new TabNews();
+
+    await tabNews.fetchRequest('/any_route');
+
+    expect(tabNews.headers.get('Cookie')).toBeNull();
+  });
+
+  it('should not create a new session id when dont has configuration', async () => {
+    fetchMock.mockOnce(
+      JSON.stringify({
+        id: 'c569430f-d424-48f0-8c6e-6ad74c45743d',
+        expires_at: '2023-09-18T10:11:49.519Z',
+        created_at: '2023-09-19T10:11:49.519Z',
+        updated_at: '2023-09-19T10:16:36.987Z',
+      }),
+    );
+
+    const tabNews = new TabNews();
+
+    await tabNews.fetchRequest('/any_route');
+
+    expect(tabNews.headers.get('Cookie')).toBeNull();
+  });
+
+  it('should not create a new session id when dont has session', async () => {
+    fetchMock.mockOnce(
+      JSON.stringify({
+        id: 'c569430f-d424-48f0-8c6e-6ad74c45743d',
+        expires_at: '2023-09-18T10:11:49.519Z',
+        created_at: '2023-09-19T10:11:49.519Z',
+        updated_at: '2023-09-19T10:16:36.987Z',
+      }),
+    );
+
+    const tabNews = new TabNews({
+      credentials: {
+        email: 'test@email.com',
+        password: 'dummy_password',
+      },
     });
 
-    it('should throw error when credentials is not configured', () => {
-      const tabNews = new TabNews({
-        credentials: {
-          email: undefined,
-          password: undefined,
-        },
-      });
+    await tabNews.fetchRequest('/any_route');
 
-      expect(() =>
-        tabNews.fetchWithCredentials('/error'),
-      ).rejects.toThrowErrorMatchingSnapshot();
+    expect(tabNews.headers.get('Cookie')).toBeNull();
+  });
+
+  it('should not create a new session id when session in not expired', async () => {
+    fetchMock.mockOnce(
+      JSON.stringify({
+        id: 'c569430f-d424-48f0-8c6e-6ad74c45743d',
+        expires_at: '2023-09-18T10:11:49.519Z',
+        created_at: '2023-09-19T10:11:49.519Z',
+        updated_at: '2023-09-19T10:16:36.987Z',
+      }),
+    );
+
+    const tabNews = new TabNews({
+      credentials: {
+        email: 'test@email.com',
+        password: 'dummy_password',
+      },
     });
 
-    it('should create a new token when is expired', async () => {
-      fetchMock.mockOnceIf(
-        (request) => request.url.endsWith('/sessions'),
-        JSON.stringify({
-          id: '123',
-          token: 'token123',
-          expires_at: '2023-10-12T11:56:13.378Z',
-          created_at: '2023-09-12T11:56:13.379Z',
-          updated_at: '2023-09-12T11:56:13.379Z',
-        }),
-      );
+    vi.spyOn(tabNews.session, 'hasSession').mockReturnValueOnce(true);
+    vi.spyOn(tabNews.session, 'isExpired').mockReturnValueOnce(false);
 
-      fetchMock.mockOnceIf(
-        (request) => request.url.endsWith('/expired'),
-        JSON.stringify({
-          id: '123',
-        }),
-      );
+    await tabNews.fetchRequest('/any_route');
 
-      vi.stubEnv('TABNEWS_CREDENTIALS_EMAIL', 'env_test@email.com');
-      vi.stubEnv('TABNEWS_CREDENTIALS_PASSWORD', 'env_dummy_password');
+    expect(tabNews.headers.get('Cookie')).toBeNull();
+  });
 
-      const tabNews = new TabNews();
+  it('should not create a new session id when session in not expired', async () => {
+    fetchMock.mockOnce(
+      JSON.stringify({
+        id: 'c569430f-d424-48f0-8c6e-6ad74c45743d',
+        expires_at: '2023-09-18T10:11:49.519Z',
+        created_at: '2023-09-19T10:11:49.519Z',
+        updated_at: '2023-09-19T10:16:36.987Z',
+      }),
+    );
 
-      vi.spyOn(tabNews.session, 'isExpired').mockReturnValue(true);
-
-      await tabNews.fetchWithCredentials('/expired');
-
-      expect(tabNews.headers.get('Cookie')).toBe('session_id=token123');
+    const tabNews = new TabNews({
+      credentials: {
+        email: 'test@email.com',
+        password: 'dummy_password',
+      },
     });
+
+    vi.spyOn(tabNews.session, 'hasSession').mockReturnValueOnce(true);
+    vi.spyOn(tabNews.session, 'isExpired').mockReturnValueOnce(false);
+
+    await tabNews.fetchRequest('/any_route');
+
+    expect(tabNews.headers.get('Cookie')).toBeNull();
+  });
+
+  it('should not create a new session id when call session.create()', async () => {
+    fetchMock.mockOnce(
+      JSON.stringify({
+        id: 'c569430f-d424-48f0-8c6e-6ad74c45743d',
+        expires_at: '2023-09-18T10:11:49.519Z',
+        created_at: '2023-09-19T10:11:49.519Z',
+        updated_at: '2023-09-19T10:16:36.987Z',
+      }),
+    );
+
+    const tabNews = new TabNews({
+      credentials: {
+        email: 'test@email.com',
+        password: 'dummy_password',
+      },
+    });
+
+    vi.spyOn(tabNews.session, 'hasSession').mockReturnValueOnce(true);
+    vi.spyOn(tabNews.session, 'isExpired').mockReturnValueOnce(true);
+
+    await tabNews.session.create();
+
+    expect(tabNews.headers.get('Cookie')).toBeNull();
+  });
+
+  it('should create a new session id when session is expired', async () => {
+    fetchMock.mockOnce(
+      JSON.stringify({
+        id: 'c569430f-d424-48f0-8c6e-6ad74c45743d',
+        expires_at: '2023-09-18T10:11:49.519Z',
+        created_at: '2023-09-19T10:11:49.519Z',
+        updated_at: '2023-09-19T10:16:36.987Z',
+      }),
+    );
+
+    const tabNews = new TabNews({
+      credentials: {
+        email: 'test@email.com',
+        password: 'dummy_password',
+      },
+    });
+
+    vi.spyOn(tabNews.session, 'hasSession').mockReturnValueOnce(true);
+    vi.spyOn(tabNews.session, 'isExpired').mockReturnValueOnce(true);
+    vi.spyOn(tabNews.session, 'create').mockResolvedValueOnce({
+      id: '123',
+      token: 'token123',
+      expires_at: '2023-10-12T11:56:13.378Z',
+      created_at: '2023-09-12T11:56:13.379Z',
+      updated_at: '2023-09-12T11:56:13.379Z',
+    });
+
+    await tabNews.fetchRequest('/any_route');
+
+    expect(tabNews.headers.get('Cookie')).toBe('session_id=token123');
   });
 });

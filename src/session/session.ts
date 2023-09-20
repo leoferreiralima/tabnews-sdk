@@ -21,7 +21,17 @@ export class Session {
   }
 
   async destroy() {
+    const response = await this.tabNews.delete<Omit<SessionResponse, 'token'>>({
+      path: '/sessions',
+    });
+
     this.session = undefined;
+
+    return response;
+  }
+
+  hasSession() {
+    return !!this.session;
   }
 
   isExpired() {
