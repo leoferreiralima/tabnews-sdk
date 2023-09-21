@@ -1,11 +1,13 @@
 import crossFetch from 'cross-fetch';
 
-export const fetch: typeof crossFetch = async (input, init) => {
+export const fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const response = await crossFetch(input, init);
 
   return {
-    ...response,
+    ok: response.ok,
+    status: response.status,
+    headers: response.headers,
     json: async () => {
       const body = await response.text();
 

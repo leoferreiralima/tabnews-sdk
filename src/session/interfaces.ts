@@ -1,7 +1,7 @@
 export interface SessionResponse {
   id: string;
   token: string;
-  expires_at: string;
-  created_at: string;
-  updated_at: string;
+  expires_at: Date;
+  created_at: Date;
+  updated_at: Date;
 }
