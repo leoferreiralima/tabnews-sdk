@@ -39,7 +39,7 @@ export class Session {
       return true;
     }
 
-    const expiresAtTimestamp = Date.parse(this.session?.expires_at);
+    const expiresAtTimestamp = this.session?.expires_at.getTime();
 
     if (expiresAtTimestamp >= Date.now()) {
       return false;

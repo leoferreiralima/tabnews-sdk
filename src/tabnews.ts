@@ -1,6 +1,6 @@
-import fetch, { Headers } from 'cross-fetch';
+import { Headers } from 'cross-fetch';
 
-import { RequestConfig } from './fetch/interfaces';
+import fetch, { RequestConfig } from './fetch';
 import { TabNewsConfig } from './interfaces';
 import { Session } from './session/session';
 import { TabNewsApiError } from './commons/interfaces';

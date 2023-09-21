@@ -199,9 +199,9 @@ describe('TabNews', () => {
     vi.spyOn(tabNews.session, 'create').mockResolvedValueOnce({
       id: '123',
       token: 'token123',
-      expires_at: '2023-10-12T11:56:13.378Z',
-      created_at: '2023-09-12T11:56:13.379Z',
-      updated_at: '2023-09-12T11:56:13.379Z',
+      expires_at: new Date('2023-10-12T11:56:13.378Z'),
+      created_at: new Date('2023-09-12T11:56:13.379Z'),
+      updated_at: new Date('2023-09-12T11:56:13.379Z'),
     });
 
     await tabNews.fetchRequest('/any_route');
