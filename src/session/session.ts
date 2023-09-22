@@ -7,7 +7,7 @@ export class Session {
   constructor(private readonly tabNews: TabNews) {}
 
   async create() {
-    const response = await this.tabNews.post<SessionResponse>({
+    const { body } = await this.tabNews.post<SessionResponse>({
       path: '/sessions',
       body: {
         email: this.tabNews.config.credentials?.email,
@@ -15,19 +15,19 @@ export class Session {
       },
     });
 
-    this.session = response;
+    this.session = body;
 
     return this.session;
   }
 
   async destroy() {
-    const response = await this.tabNews.delete<Omit<SessionResponse, 'token'>>({
+    const { body } = await this.tabNews.delete<Omit<SessionResponse, 'token'>>({
       path: '/sessions',
     });
 
     this.session = undefined;
 
-    return response;
+    return body;
   }
 
   hasSession() {

@@ -34,7 +34,7 @@ export class TabNews {
   async fetchRequest<T>(
     path: string,
     { body, ...options }: Omit<RequestConfig, 'path'> = {},
-  ): Promise<T> {
+  ) {
     const isCreateSession =
       path.includes('/sessions') && 'POST' === options.method;
 
@@ -60,36 +60,40 @@ export class TabNews {
       throw new TabNewsError(error);
     }
 
-    return await response.json();
+    return {
+      status: response.status,
+      headers: response.headers,
+      body: (await response.json()) as T,
+    };
   }
 
-  async get<T>({ path, ...options }: RequestConfig): Promise<T> {
+  async get<T>({ path, ...options }: RequestConfig) {
     const requestOptions = {
       method: 'GET',
       ...options,
     };
 
-    return await this.fetchRequest(path, requestOptions);
+    return await this.fetchRequest<T>(path, requestOptions);
   }
 
-  async post<T>({ path, body, ...options }: RequestConfig): Promise<T> {
+  async post<T>({ path, body, ...options }: RequestConfig) {
     const requestOptions = {
       method: 'POST',
       body: JSON.stringify(body),
       ...options,
     };
 
-    return await this.fetchRequest(path, requestOptions);
+    return await this.fetchRequest<T>(path, requestOptions);
   }
 
-  async delete<T>({ path, body, ...options }: RequestConfig): Promise<T> {
+  async delete<T>({ path, body, ...options }: RequestConfig) {
     const requestOptions = {
       method: 'DELETE',
       body: JSON.stringify(body),
       ...options,
     };
 
-    return await this.fetchRequest(path, requestOptions);
+    return await this.fetchRequest<T>(path, requestOptions);
   }
 
   private isCredentialsConfigured() {
