@@ -2,9 +2,10 @@ import { Headers } from 'cross-fetch';
 
 import fetch, { RequestConfig } from './fetch';
 import { TabNewsConfig } from './interfaces';
-import { Session } from './session/session';
+import { Session } from './session';
 import { TabNewsApiError } from './commons/interfaces';
 import { TabNewsError } from './commons/errors';
+import { Content } from './content';
 
 const baseUrl =
   process.env.TABNEWS_BASE_URL || 'https://www.tabnews.com.br/api/v1';
@@ -13,6 +14,7 @@ export class TabNews {
   readonly headers: Headers;
 
   readonly session = new Session(this);
+  readonly content = new Content(this);
 
   constructor(readonly config: Partial<TabNewsConfig> = {}) {
     if (!config.credentials) {
@@ -59,6 +61,15 @@ export class TabNews {
     }
 
     return await response.json();
+  }
+
+  async get<T>({ path, ...options }: RequestConfig): Promise<T> {
+    const requestOptions = {
+      method: 'GET',
+      ...options,
+    };
+
+    return await this.fetchRequest(path, requestOptions);
   }
 
   async post<T>({ path, body, ...options }: RequestConfig): Promise<T> {
