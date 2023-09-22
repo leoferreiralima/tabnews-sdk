@@ -106,5 +106,58 @@ import { TabNews } from 'tabnews-sdk';
 
 const tabNews = new TabNews();
 
-const contents = await tabNews.contents.getAll();
+const { contents } = await tabNews.contents.getAll();
+```
+
+### Conteúdos
+
+A api conteúdos de conteúdos permite lista todos os posts/comentários dentro
+do tabnews, alguns dos exemplos de como interagir com essa api está abaixo:
+
+**Buscar Conteúdos**
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+const { pagination, contents } = await tabNews.contents.getAll();
+```
+
+**Buscar Conteúdos Paginados**
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+const { pagination, contents } = await tabNews.contents.getAll({
+  page: 1,
+  per_page: 30,
+  strategy: 'relevant',
+});
+```
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+const { pagination, contents } = await tabNews.contents.getAll({
+  page: 2,
+  per_page: 50,
+  strategy: 'relevant',
+});
+
+const prevContents = await tabNews.contents.getAll({
+  page: pagination.previous_page,
+  per_page: 50,
+  strategy: 'relevant',
+});
+
+const nextContents = await tabNews.contents.getAll({
+  page: pagination.next_page,
+  per_page: 50,
+  strategy: 'relevant',
+});
 ```
