@@ -15,8 +15,9 @@ export interface ContentResponse {
   children_deep_count: number;
 }
 
-type ContentStrategy = 'new' | 'old' | 'relevant';
-export interface GetContent {
+export type ContentStrategy = 'new' | 'old' | 'relevant';
+
+export interface GetContentParams {
   page?: number;
   per_page?: number;
   strategy?: ContentStrategy;
@@ -31,9 +32,4 @@ export interface ContentPagination {
   next_page?: number;
   previous_page?: number;
   total_rows: number;
-}
-
-export interface ContentList {
-  contents: ContentResponse[];
-  pagination: ContentPagination;
 }
