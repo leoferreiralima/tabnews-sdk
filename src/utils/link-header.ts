@@ -14,7 +14,10 @@ export function parseLink(link: string) {
     .map((value) => value.trim())
     .map((value) => value.split(';'))
     .map(([url, rel]) => {
-      return [url.replace(/<|>/gm, ''), rel.trim().replace(/(rel=)|"/gm, '')];
+      return [
+        url.replace('<', '').replace('>', ''),
+        rel.trim().replace(/(rel=)|"/gm, ''),
+      ];
     })
     .forEach(([url, rel]) => {
       const urlParams = getUrlSearchParams(url);
