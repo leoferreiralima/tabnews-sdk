@@ -49,10 +49,35 @@ export const DEFAULT_SESSION = {
   updated_at: '2023-09-12T11:56:13.379Z',
 };
 
+export const DEFAULT_USER = {
+  id: 'id',
+  username: 'username',
+  email: 'my@email.com',
+  description: 'description',
+  notifications: true,
+  features: [
+    'create:session',
+    'read:session',
+    'create:content',
+    'create:content:text_root',
+    'create:content:text_child',
+    'update:content',
+    'update:user',
+  ],
+  tabcoins: 9,
+  tabcash: 10,
+  created_at: '2022-04-05T23:50:19.920Z',
+  updated_at: '2022-04-05T23:50:56.545Z',
+};
+
 export function mockOnceSession(
   session: typeof DEFAULT_SESSION = DEFAULT_SESSION,
 ) {
   mockOnceResponse(TABNEWS_ENDPOINTS.session, session);
+}
+
+export function mockOnceCurrentUser(user: typeof DEFAULT_USER = DEFAULT_USER) {
+  mockOnceResponse(TABNEWS_ENDPOINTS.user, user);
 }
 
 export function mockedRequests() {

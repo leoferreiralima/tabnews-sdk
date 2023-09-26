@@ -5,6 +5,7 @@ import { expect, describe, it, beforeEach, afterEach } from 'vitest';
 import { TABNEWS_ENDPOINTS, TABNEWS_HEADERS } from '@/commons';
 import { TabNews } from '@/tabnews';
 import {
+  DEFAULT_USER,
   createTabNews,
   expectRequest,
   mockOnceApiError,
@@ -16,26 +17,7 @@ import {
 
 let tabNews: TabNews;
 
-const user = {
-  id: 'id',
-  username: 'username',
-  email: 'my@email.com',
-  description: 'description',
-  notifications: true,
-  features: [
-    'create:session',
-    'read:session',
-    'create:content',
-    'create:content:text_root',
-    'create:content:text_child',
-    'update:content',
-    'update:user',
-  ],
-  tabcoins: 9,
-  tabcash: 10,
-  created_at: '2022-04-05T23:50:19.920Z',
-  updated_at: '2022-04-05T23:50:56.545Z',
-};
+const user = DEFAULT_USER;
 
 describe('User', () => {
   beforeEach(() => {

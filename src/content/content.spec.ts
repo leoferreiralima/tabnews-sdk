@@ -3,9 +3,11 @@ import { expect, describe, it, afterEach, beforeEach } from 'vitest';
 import { TABNEWS_ENDPOINTS, TABNEWS_HEADERS } from '@/commons';
 import { TabNews } from '@/tabnews';
 import {
+  DEFAULT_USER,
   createTabNews,
   expectRequest,
   mockOnceApiError,
+  mockOnceCurrentUser,
   mockOnceResponse,
   mockOnceSession,
   mockedRequest,
@@ -54,13 +56,19 @@ describe('Content', () => {
   });
 
   describe('get', () => {
-    const mockContents = (link: string) => {
-      mockOnceResponse(TABNEWS_ENDPOINTS.content, [content], {
-        headers: {
-          [TABNEWS_HEADERS.link]: link,
-          [TABNEWS_HEADERS.paginationTotalRows]: '175',
+    const mockContents = (link: string, username?: string) => {
+      mockOnceResponse(
+        username
+          ? `${TABNEWS_ENDPOINTS.content}/${username}`
+          : TABNEWS_ENDPOINTS.content,
+        [content],
+        {
+          headers: {
+            [TABNEWS_HEADERS.link]: link,
+            [TABNEWS_HEADERS.paginationTotalRows]: '175',
+          },
         },
-      });
+      );
     };
 
     it('should return all contents and pagination', async () => {
@@ -124,6 +132,37 @@ describe('Content', () => {
       expectRequest(third).query('page').toBeNull();
       expectRequest(third).query('per_page').toBeNull();
       expectRequest(third).query('strategy').toBe('old');
+    });
+
+    it('should return all contents for a specific user', async () => {
+      const username = 'username';
+      mockContents(linkHeader, username);
+
+      const response = await tabNews.content.getAll({
+        username,
+      });
+
+      expect(response.pagination).toMatchSnapshot();
+      expect(response.contents).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBeGet();
+    });
+
+    it('should return all contents for current user', async () => {
+      mockOnceCurrentUser();
+
+      mockContents(linkHeader, DEFAULT_USER.username);
+
+      const response = await tabNews.content.getMy();
+
+      expect(response.pagination).toMatchSnapshot();
+      expect(response.contents).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBeGet();
     });
 
     it('should return error when parameter is invalid', () => {

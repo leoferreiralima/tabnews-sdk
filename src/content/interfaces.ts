@@ -20,6 +20,7 @@ export interface ContentResponse {
 }
 
 export interface GetContentParams {
+  username?: string;
   page?: number;
   per_page?: number;
   strategy?: ContentStrategy;
