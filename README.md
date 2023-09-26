@@ -162,3 +162,37 @@ const nextContents = await tabNews.contents.getAll({
   strategy: 'relevant',
 });
 ```
+
+**Criar Conteúdo**
+
+Na rota de criação de conteúdos, todos os campos são opcionais exceto o `body`,
+que é o seu post ou comentario, e o `title` que é opcional apenas quando há um `parent_id`
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+const response = await tabNews.contents.create({
+  parent_id: undefined,
+  slug: 'e-opcional',
+  title: 'test',
+  body: 'test',
+  status: 'published',
+  source_url: 'https://google.com',
+});
+```
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+const { contents } = await tabNews.contents.getAll();
+
+const response = await tabNews.contents.create({
+  parent_id: contents[0].id,
+  body: 'comentando em um conteúdo',
+  status: 'published',
+});
+```
