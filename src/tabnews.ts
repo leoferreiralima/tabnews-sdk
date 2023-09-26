@@ -3,14 +3,15 @@ import { Headers } from 'cross-fetch';
 import {
   TABNEWS_BASE_URL,
   TABNEWS_ENDPOINTS,
+  TABNEWS_HEADERS,
   TabNewsApiError,
   TabNewsError,
-} from './commons';
-import { Content } from './content';
-import fetch, { RequestConfig } from './fetch';
-import { TabNewsConfig } from './interfaces';
-import { Session } from './session';
-import { User } from './user';
+} from '@/commons';
+import { Content } from '@/content';
+import fetch, { RequestConfig } from '@/fetch';
+import { TabNewsConfig } from '@/interfaces';
+import { Session } from '@/session';
+import { User } from '@/user';
 
 export class TabNews {
   readonly headers: Headers;
@@ -52,7 +53,10 @@ export class TabNews {
         ? await this.session.create()
         : this.session.session;
       if (session) {
-        this.headers.set('Cookie', `session_id=${session.token}`);
+        this.headers.set(
+          TABNEWS_HEADERS.cookie,
+          `${TABNEWS_HEADERS.sessionId}=${session.token}`,
+        );
       }
     }
 

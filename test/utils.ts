@@ -29,7 +29,7 @@ export function mockOnceResponse(
   mockParams?: MockParams,
 ) {
   fetchMock.doMockOnceIf(
-    (response) => response.url.endsWith(path),
+    (response) => new URL(response.url).pathname.endsWith(path),
     JSON.stringify(body),
     mockParams,
   );
@@ -65,6 +65,8 @@ export function mockedRequest() {
 }
 
 export function expectRequest(request: Request) {
+  const url = new URL(request.url);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const toBodyBe = <T extends object>(body: T) => {
     expect(request.json()).resolves.toMatchObject(body);
@@ -80,6 +82,12 @@ export function expectRequest(request: Request) {
     toBeNull: () => expect(request.headers.get(headerName)).toBeNull(),
   });
 
+  const query = (parameter: string) => ({
+    toBe: (parameterValue: string) =>
+      expect(url.searchParams.get(parameter)).toBe(parameterValue),
+    toBeNull: () => expect(url.searchParams.get(parameter)).toBeNull(),
+  });
+
   return {
     body: {
       toBe: toBodyBe,
@@ -90,6 +98,7 @@ export function expectRequest(request: Request) {
       toBeDelete,
     },
     header,
+    query,
   };
 }
 

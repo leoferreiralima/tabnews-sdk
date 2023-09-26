@@ -6,3 +6,10 @@ export const TABNEWS_ENDPOINTS = Object.freeze({
   user: '/user',
   content: '/contents',
 });
+
+export const TABNEWS_HEADERS = Object.freeze({
+  cookie: 'Cookie',
+  link: 'link',
+  paginationTotalRows: 'x-pagination-total-rows',
+  sessionId: 'session_id',
+});

@@ -2,7 +2,7 @@ import 'vitest-fetch-mock';
 
 import { expect, describe, it, afterEach, beforeEach, vi } from 'vitest';
 
-import { TABNEWS_ENDPOINTS } from '@/commons';
+import { TABNEWS_ENDPOINTS, TABNEWS_HEADERS } from '@/commons';
 import { TabNews } from '@/tabnews';
 import {
   DEFAULT_TABNEWS_CONFIG,
@@ -52,7 +52,7 @@ describe('Session', () => {
       expectRequest(request).method.toBePost();
     });
 
-    it('should throw a tabnews error when api return error', async () => {
+    it('should throw a tabnews error when api return error', () => {
       mockOnceApiError(TABNEWS_ENDPOINTS.session, {
         name: 'UnauthorizedError',
         message: 'Dados não conferem.',
@@ -85,8 +85,8 @@ describe('Session', () => {
 
       expectRequest(request).method.toBeDelete();
       expectRequest(request)
-        .header('Cookie')
-        .toBe(`session_id=${session.token}`);
+        .header(TABNEWS_HEADERS.cookie)
+        .toBe(`${TABNEWS_HEADERS.sessionId}=${session.token}`);
     });
 
     it('should throw an error when has no session', async () => {
@@ -107,7 +107,7 @@ describe('Session', () => {
 
       const request = mockedRequest();
 
-      expectRequest(request).header('Cookie').toBeNull();
+      expectRequest(request).header(TABNEWS_HEADERS.cookie).toBeNull();
     });
   });
 
