@@ -85,8 +85,8 @@ describe('Session', () => {
 
       expectRequest(request).method.toBeDelete();
       expectRequest(request)
-        .header(TABNEWS_HEADERS.cookie)
-        .toBe(`${TABNEWS_HEADERS.sessionId}=${session.token}`);
+        .cookie(TABNEWS_HEADERS.sessionId)
+        .toBe(session.token);
     });
 
     it('should throw an error when has no session', async () => {
@@ -107,7 +107,8 @@ describe('Session', () => {
 
       const request = mockedRequest();
 
-      expectRequest(request).header(TABNEWS_HEADERS.cookie).toBeNull();
+      expectRequest(request).method.toBeDelete();
+      expectRequest(request).cookie(TABNEWS_HEADERS.sessionId).toBeUndefined();
     });
   });
 

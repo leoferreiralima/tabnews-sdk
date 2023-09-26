@@ -7,6 +7,7 @@ import {
   expectRequest,
   mockOnceApiError,
   mockOnceResponse,
+  mockOnceSession,
   mockedRequest,
   mockedRequests,
   resetMocks,
@@ -168,7 +169,11 @@ describe('Content', () => {
     };
 
     it('should create content', async () => {
+      mockOnceSession();
+
       mockCreateContent();
+
+      await tabNews.session.create();
 
       const response = await tabNews.content.create({
         slug: 'e-opcional',
@@ -190,6 +195,8 @@ describe('Content', () => {
         status: 'draft',
         source_url: 'https://google.com',
       });
+
+      expectRequest(request).cookie(TABNEWS_HEADERS.sessionId).toBeDefined();
     });
 
     it('should throw an error when create content with invalid parameters', () => {

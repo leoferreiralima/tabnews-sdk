@@ -1,7 +1,7 @@
 import { expect } from 'vitest';
 import { MockParams } from 'vitest-fetch-mock';
 
-import { TABNEWS_ENDPOINTS } from '@/commons';
+import { TABNEWS_ENDPOINTS, TABNEWS_HEADERS } from '@/commons';
 import { TabNewsApiError } from '@/commons/interfaces';
 import { TabNewsConfig } from '@/interfaces';
 import { TabNews } from '@/tabnews';
@@ -64,6 +64,22 @@ export function mockedRequest() {
   return request;
 }
 
+const parseCookie = (cookie: string | null) =>
+  !cookie
+    ? {}
+    : cookie
+        .split(';')
+        .map((v) => v.split('='))
+        .reduce(
+          (acc, v) => {
+            acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(
+              v[1].trim(),
+            );
+            return acc;
+          },
+          {} as Record<string, string>,
+        );
+
 export function expectRequest(request: Request) {
   const url = new URL(request.url);
 
@@ -88,6 +104,17 @@ export function expectRequest(request: Request) {
     toBeNull: () => expect(url.searchParams.get(parameter)).toBeNull(),
   });
 
+  const cookie = (cookieName: string) => {
+    const cookies = parseCookie(request.headers.get(TABNEWS_HEADERS.cookie));
+
+    return {
+      toBe: (cookieValue: string) =>
+        expect(cookies[cookieName]).toBe(cookieValue),
+      toBeDefined: () => expect(cookies[cookieName]).toBeDefined(),
+      toBeUndefined: () => expect(cookies[cookieName]).toBeUndefined,
+    };
+  };
+
   return {
     body: {
       toBe: toBodyBe,
@@ -99,6 +126,7 @@ export function expectRequest(request: Request) {
     },
     header,
     query,
+    cookie,
   };
 }
 
