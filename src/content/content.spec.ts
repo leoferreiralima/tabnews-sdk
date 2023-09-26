@@ -90,7 +90,7 @@ describe('Content', () => {
       expectRequest(request).method.toBeGet();
     });
 
-    it('should send all content params correctly', () => {
+    it('should send all content params correctly', async () => {
       const paramsList: GetContentParams[] = [
         {
           page: 2,
@@ -106,12 +106,11 @@ describe('Content', () => {
         },
       ];
 
-      paramsList.forEach(async (params) => {
+      for (const params of paramsList) {
         mockContents(linkHeader);
 
         await tabNews.content.getAll(params);
-      });
-
+      }
       const [first, second, third] = mockedRequests();
 
       expectRequest(first).query('page').toBe('2');
