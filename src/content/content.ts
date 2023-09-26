@@ -4,11 +4,22 @@ import {
   ContentPagination,
   ContentResponse,
   ContentStrategy,
+  CreateContent,
+  CreateContentResponse,
   GetContentParams,
 } from './interfaces';
 
 export class Content {
   constructor(private readonly tabNews: TabNews) {}
+
+  async create(contentBody: CreateContent) {
+    const { body: content } = await this.tabNews.post<CreateContentResponse>({
+      path: '/contents',
+      body: contentBody,
+    });
+
+    return content;
+  }
 
   async getAll(params: GetContentParams = {}) {
     const urlParams = new URLSearchParams();

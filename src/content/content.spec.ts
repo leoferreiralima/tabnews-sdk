@@ -210,4 +210,53 @@ describe('Content', () => {
       expect(requests[2].url.endsWith('strategy=old')).toBeTruthy();
     });
   });
+
+  describe('create', () => {
+    it('should create content', async () => {
+      fetchMock.mockOnce(
+        JSON.stringify({
+          id: '502d02a1-2e38-4cc6-9e41-55c978e34c67',
+          owner_id: '605144ec-9f0d-437b-96ee-1b5f4e54f5f9',
+          parent_id: null,
+          slug: 'e-opcional',
+          title: 'test',
+          body: 'test',
+          status: 'draft',
+          source_url: null,
+          created_at: '2023-09-19T10:29:20.967Z',
+          updated_at: '2023-09-19T10:29:20.967Z',
+          published_at: null,
+          deleted_at: null,
+          owner_username: 'leoferreiralima',
+          tabcoins: 0,
+        }),
+      );
+
+      const response = await tabNews.content.create({
+        parent_id: undefined,
+        slug: 'e-opcional',
+        title: 'test',
+        body: 'test',
+        status: 'draft',
+        source_url: 'https://google.com',
+      });
+
+      expect(response).toMatchObject({
+        id: '502d02a1-2e38-4cc6-9e41-55c978e34c67',
+        owner_id: '605144ec-9f0d-437b-96ee-1b5f4e54f5f9',
+        parent_id: null,
+        slug: 'e-opcional',
+        title: 'test',
+        body: 'test',
+        status: 'draft',
+        source_url: null,
+        created_at: new Date('2023-09-19T10:29:20.967Z'),
+        updated_at: new Date('2023-09-19T10:29:20.967Z'),
+        published_at: null,
+        deleted_at: null,
+        owner_username: 'leoferreiralima',
+        tabcoins: 0,
+      });
+    });
+  });
 });
