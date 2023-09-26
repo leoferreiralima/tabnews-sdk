@@ -1,6 +1,8 @@
 import 'vitest-fetch-mock';
 
 import { expect, describe, it, afterEach, beforeEach, vi } from 'vitest';
+
+import { TABNEWS_ENDPOINTS } from '@/commons';
 import { TabNews } from '@/tabnews';
 import {
   DEFAULT_TABNEWS_CONFIG,
@@ -12,7 +14,6 @@ import {
   mockedRequest,
   resetMocks,
 } from '@test/utils';
-import { TABNEWS_ENDPOINTS } from '@/commons';
 
 let tabNews: TabNews;
 

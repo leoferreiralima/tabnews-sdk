@@ -1,6 +1,7 @@
-import { TabNews } from '@/tabnews';
-import { SessionResponse } from './interfaces';
 import { TABNEWS_ENDPOINTS } from '@/commons';
+import { TabNews } from '@/tabnews';
+
+import { SessionResponse } from './interfaces';
 
 export class Session {
   session?: SessionResponse;

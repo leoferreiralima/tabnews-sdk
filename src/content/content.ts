@@ -1,5 +1,7 @@
+import { TABNEWS_ENDPOINTS } from '@/commons';
 import { TabNews } from '@/tabnews';
 import { parseLink } from '@/utils';
+
 import {
   ContentPagination,
   ContentResponse,
@@ -8,7 +10,6 @@ import {
   CreateContentResponse,
   GetContentParams,
 } from './interfaces';
-import { TABNEWS_ENDPOINTS } from '@/commons';
 
 export class Content {
   constructor(private readonly tabNews: TabNews) {}

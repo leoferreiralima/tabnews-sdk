@@ -1,11 +1,10 @@
-import 'vitest-fetch-mock';
-
-import { TabNews } from '@/tabnews';
+import { expect } from 'vitest';
 import { MockParams } from 'vitest-fetch-mock';
+
+import { TABNEWS_ENDPOINTS } from '@/commons';
 import { TabNewsApiError } from '@/commons/interfaces';
 import { TabNewsConfig } from '@/interfaces';
-import { expect } from 'vitest';
-import { TABNEWS_ENDPOINTS } from '@/commons';
+import { TabNews } from '@/tabnews';
 
 export const DEFAULT_TABNEWS_CONFIG: Partial<TabNewsConfig> = {
   credentials: {

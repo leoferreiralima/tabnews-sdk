@@ -1,6 +1,7 @@
 import 'vitest-fetch-mock';
 
 import { expect, describe, it, beforeEach } from 'vitest';
+
 import { TabNews } from '@/tabnews';
 import { createTabNews } from '@test/utils';
 

@@ -1,7 +1,9 @@
 import { expect, describe, it, afterEach, beforeEach } from 'vitest';
+
 import { TabNews } from '@/tabnews';
-import { GetContentParams } from './interfaces';
 import { createTabNews, resetMocks } from '@test/utils';
+
+import { GetContentParams } from './interfaces';
 
 let tabNews: TabNews;
 

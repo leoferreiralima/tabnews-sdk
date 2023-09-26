@@ -1,6 +1,7 @@
-import { TabNews } from '@/tabnews';
-import { UserResponse } from './interfaces';
 import { TABNEWS_ENDPOINTS } from '@/commons';
+import { TabNews } from '@/tabnews';
+
+import { UserResponse } from './interfaces';
 
 export class User {
   constructor(private readonly tabNews: TabNews) {}

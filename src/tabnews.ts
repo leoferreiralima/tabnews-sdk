@@ -1,16 +1,16 @@
 import { Headers } from 'cross-fetch';
 
-import fetch, { RequestConfig } from './fetch';
-import { TabNewsConfig } from './interfaces';
-import { Session } from './session';
-import { Content } from './content';
-import { User } from './user';
 import {
   TABNEWS_BASE_URL,
   TABNEWS_ENDPOINTS,
   TabNewsApiError,
   TabNewsError,
 } from './commons';
+import { Content } from './content';
+import fetch, { RequestConfig } from './fetch';
+import { TabNewsConfig } from './interfaces';
+import { Session } from './session';
+import { User } from './user';
 
 export class TabNews {
   readonly headers: Headers;

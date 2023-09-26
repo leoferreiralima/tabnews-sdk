@@ -1,6 +1,7 @@
 import 'vitest-fetch-mock';
 
 import { expect, describe, it, vi } from 'vitest';
+
 import { TabNews } from './tabnews';
 
 describe('TabNews', () => {
