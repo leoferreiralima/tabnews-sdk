@@ -23,7 +23,7 @@ export class Content {
     return content;
   }
 
-  async getAll(params: GetContentParams = {}) {
+  async getAll({ username, ...params }: GetContentParams = {}) {
     const urlParams = new URLSearchParams();
 
     Object.entries(params).forEach(([key, value]) => {
@@ -32,13 +32,14 @@ export class Content {
       }
     });
 
+    const url = username
+      ? `${TABNEWS_ENDPOINTS.content}/${username}`
+      : TABNEWS_ENDPOINTS.content;
+
     const { body: contents, headers } = await this.tabNews.get<
       ContentResponse[]
     >({
-      path:
-        urlParams.size > 0
-          ? `${TABNEWS_ENDPOINTS.content}?${urlParams.toString()}`
-          : TABNEWS_ENDPOINTS.content,
+      path: urlParams.size > 0 ? `${url}?${urlParams.toString()}` : url,
     });
 
     const links = parseLink(headers.get('link')!);
@@ -59,5 +60,11 @@ export class Content {
       contents,
       pagination,
     };
+  }
+
+  async getMy(params: Omit<GetContentParams, 'username'> = {}) {
+    const { username } = await this.tabNews.user.me();
+
+    return await this.getAll({ username, ...params });
   }
 }

@@ -15,28 +15,30 @@ Esse projeto foi criado com o intuito de fornecer uma interface amigável de int
 
 ## Sumário
 
-- [Instalação](#instalação)
-- [Exemplos](#exemplos)
-  - [TabNews](#tabnews)
-  - [Sessão](#sessão)
-  - [Usuário](#usuário)
-  - [Conteúdos](#conteúdos)
+- [TabNews SDK](#tabnews-sdk)
+  - [Sumário](#sumário)
+  - [Instalação](#instalação)
+  - [Exemplos](#exemplos)
+    - [TabNews](#tabnews)
+    - [Sessão](#sessão)
+    - [Usuário](#usuário)
+    - [Conteúdos](#conteúdos)
 
 ## Instalação
 
 Para começar a usar o tabnews-sdk dentro do seu projeto basta instalar com o seu
 gerenciador de pacotes favorito
 
-```
-$ npm install tabnews-sdk
-```
-
-```
-$ yarn add tabnews-sdk
+```sh
+npm install tabnews-sdk
 ```
 
+```sh
+yarn add tabnews-sdk
 ```
-$ pnpm add tabnews-sdk
+
+```sh
+pnpm add tabnews-sdk
 ```
 
 ## Exemplos
@@ -176,6 +178,37 @@ const prevContents = await tabNews.contents.getAll({
 const nextContents = await tabNews.contents.getAll({
   page: pagination.next_page,
   per_page: 50,
+  strategy: 'relevant',
+});
+```
+
+**Buscar Conteúdos de um Usuário**
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+const { pagination, contents } = await tabNews.contents.getAll({
+  username: '<any_username>',
+  page: 1,
+  per_page: 30,
+  strategy: 'relevant',
+});
+```
+
+**Buscar Conteúdos para o Usuário atual**
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+await tabNews.session.create();
+
+const { pagination, contents } = await tabNews.contents.getMy({
+  page: 1,
+  per_page: 30,
   strategy: 'relevant',
 });
 ```
