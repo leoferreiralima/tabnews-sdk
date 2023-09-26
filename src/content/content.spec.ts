@@ -3,6 +3,7 @@ import 'vitest-fetch-mock';
 import { expect, describe, it, afterEach, beforeEach } from 'vitest';
 import { TabNews } from '@/tabnews';
 import { GetContentParams } from './interfaces';
+import { createTabNews } from '@test/utils';
 
 let tabNews: TabNews;
 
@@ -18,12 +19,7 @@ const lastPageLinkHeader =
 
 describe('Content', () => {
   beforeEach(() => {
-    tabNews = new TabNews({
-      credentials: {
-        email: 'test@email.com',
-        password: 'dummy_password',
-      },
-    });
+    tabNews = createTabNews();
   });
 
   afterEach(() => {

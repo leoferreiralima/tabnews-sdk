@@ -43,12 +43,16 @@ export class TabNews {
     const shouldRenovateSession =
       !isCreateSession &&
       this.isCredentialsConfigured() &&
-      this.session.hasSession() &&
-      this.session.isExpired();
+      this.session.hasSession();
 
     if (shouldRenovateSession) {
-      const session = await this.session.create();
-      this.headers.set('Cookie', `session_id=${session.token}`);
+      // TODO add a better solution later
+      const session = this.session.isExpired()
+        ? await this.session.create()
+        : this.session.session;
+      if (session) {
+        this.headers.set('Cookie', `session_id=${session.token}`);
+      }
     }
 
     const response = await fetch(`${baseUrl}${path}`, {

@@ -2,7 +2,7 @@ import { TabNews } from '@/tabnews';
 import { SessionResponse } from './interfaces';
 
 export class Session {
-  private session?: SessionResponse;
+  session?: SessionResponse;
 
   constructor(private readonly tabNews: TabNews) {}
 

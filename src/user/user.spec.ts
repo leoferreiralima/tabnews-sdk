@@ -2,17 +2,13 @@ import 'vitest-fetch-mock';
 
 import { expect, describe, it, beforeEach } from 'vitest';
 import { TabNews } from '@/tabnews';
+import { createTabNews } from '@test/utils';
 
 let tabNews: TabNews;
 
 describe('User', () => {
   beforeEach(() => {
-    tabNews = new TabNews({
-      credentials: {
-        email: 'test@email.com',
-        password: 'dummy_password',
-      },
-    });
+    tabNews = createTabNews();
   });
 
   describe('me', () => {
