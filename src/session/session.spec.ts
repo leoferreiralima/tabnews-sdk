@@ -1,56 +1,67 @@
 import 'vitest-fetch-mock';
 
 import { expect, describe, it, afterEach, beforeEach, vi } from 'vitest';
-import { TabNews } from '../tabnews';
+
+import { TABNEWS_ENDPOINTS, TABNEWS_HEADERS } from '@/commons';
+import { TabNews } from '@/tabnews';
+import {
+  DEFAULT_TABNEWS_CONFIG,
+  createTabNews,
+  expectRequest,
+  mockOnceApiError,
+  mockOnceResponse,
+  mockOnceSession,
+  mockedRequest,
+  resetMocks,
+} from '@test/utils';
 
 let tabNews: TabNews;
 
 describe('Session', () => {
-  beforeEach(() => {
-    tabNews = new TabNews({
-      credentials: {
-        email: 'test@email.com',
-        password: 'dummy_password',
-      },
+  const mockDestroySession = () =>
+    mockOnceResponse(TABNEWS_ENDPOINTS.session, {
+      id: '123',
+      expires_at: '2023-10-12T11:56:13.378Z',
+      created_at: '2023-09-12T11:56:13.379Z',
+      updated_at: '2023-09-12T11:56:13.379Z',
     });
+
+  beforeEach(() => {
+    tabNews = createTabNews();
   });
+
   afterEach(() => {
-    fetchMock.resetMocks();
+    resetMocks();
   });
 
   describe('create', () => {
     it('should create a session', async () => {
-      fetchMock.mockOnce(
-        JSON.stringify({
-          id: '123',
-          token: 'token123',
-          expires_at: '2023-10-12T11:56:13.378Z',
-          created_at: '2023-09-12T11:56:13.379Z',
-          updated_at: '2023-09-12T11:56:13.379Z',
-        }),
-      );
+      mockOnceSession();
 
-      const data = await tabNews.session.create();
+      const session = await tabNews.session.create();
 
-      expect(data).toMatchObject({
-        id: '123',
-        token: 'token123',
-        expires_at: new Date('2023-10-12T11:56:13.378Z'),
-        created_at: new Date('2023-09-12T11:56:13.379Z'),
-        updated_at: new Date('2023-09-12T11:56:13.379Z'),
+      expect(session).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).body.toBe({
+        email: DEFAULT_TABNEWS_CONFIG.credentials?.email,
+        password: DEFAULT_TABNEWS_CONFIG.credentials?.password,
       });
+
+      expectRequest(request).method.toBePost();
     });
 
-    it('should throw a tabnews error when api return error', async () => {
-      fetchMock.mockOnce(
-        JSON.stringify({
-          message: `"user" não possui "features" ou não é um array.`,
-          action: `Contate o suporte informado o campo "errorId".`,
-        }),
-        {
-          status: 400,
-        },
-      );
+    it('should throw a tabnews error when api return error', () => {
+      mockOnceApiError(TABNEWS_ENDPOINTS.session, {
+        name: 'UnauthorizedError',
+        message: 'Dados não conferem.',
+        action: 'Verifique se os dados enviados estão corretos.',
+        status_code: 401,
+        error_id: '69b34554-7c09-4772-b0cc-497fcb03222b',
+        request_id: '6efd0399-622b-4ba9-8703-0d80f58308c2',
+        error_location_code: 'CONTROLLER:SESSIONS:POST_HANDLER:DATA_MISMATCH',
+      });
 
       expect(() =>
         tabNews.session.create(),
@@ -60,35 +71,44 @@ describe('Session', () => {
 
   describe('destroy', () => {
     it('should destroy a session', async () => {
-      fetchMock.mockOnce(
-        JSON.stringify({
-          id: '123',
-          token: 'token123',
-          expires_at: '2023-10-12T11:56:13.378Z',
-          created_at: '2023-09-12T11:56:13.379Z',
-          updated_at: '2023-09-12T11:56:13.379Z',
-        }),
-      );
+      mockOnceSession();
 
-      await tabNews.session.create();
+      const session = await tabNews.session.create();
 
-      fetchMock.mockOnce(
-        JSON.stringify({
-          id: '123',
-          expires_at: '2023-10-12T11:56:13.378Z',
-          created_at: '2023-09-12T11:56:13.379Z',
-          updated_at: '2023-09-12T11:56:13.379Z',
-        }),
-      );
+      mockDestroySession();
 
-      const data = await tabNews.session.destroy();
+      const destroyedSession = await tabNews.session.destroy();
 
-      expect(data).toMatchObject({
-        id: '123',
-        expires_at: new Date('2023-10-12T11:56:13.378Z'),
-        created_at: new Date('2023-09-12T11:56:13.379Z'),
-        updated_at: new Date('2023-09-12T11:56:13.379Z'),
+      expect(destroyedSession).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBeDelete();
+      expectRequest(request)
+        .cookie(TABNEWS_HEADERS.sessionId)
+        .toBe(session.token);
+    });
+
+    it('should throw an error when has no session', async () => {
+      mockOnceApiError(TABNEWS_ENDPOINTS.session, {
+        name: 'ForbiddenError',
+        message: 'Usuário não pode executar esta operação.',
+        action: 'Verifique se este usuário possui a feature "read:session".',
+        status_code: 403,
+        error_id: 'b42a2fd9-d3c5-4aaa-bd3a-b92ee15904b2',
+        request_id: 'cd96640c-9ac2-4976-ae2d-154a29c967a2',
+        error_location_code:
+          'MODEL:AUTHORIZATION:CAN_REQUEST:FEATURE_NOT_FOUND',
       });
+
+      expect(() =>
+        tabNews.session.destroy(),
+      ).rejects.toThrowErrorMatchingSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBeDelete();
+      expectRequest(request).cookie(TABNEWS_HEADERS.sessionId).toBeUndefined();
     });
   });
 

@@ -1,5 +1,7 @@
-import { TabNews } from '../tabnews';
-import { parseLink } from '../utils';
+import { TABNEWS_ENDPOINTS } from '@/commons';
+import { TabNews } from '@/tabnews';
+import { parseLink } from '@/utils';
+
 import {
   ContentPagination,
   ContentResponse,
@@ -14,7 +16,7 @@ export class Content {
 
   async create(contentBody: CreateContent) {
     const { body: content } = await this.tabNews.post<CreateContentResponse>({
-      path: '/contents',
+      path: TABNEWS_ENDPOINTS.content,
       body: contentBody,
     });
 
@@ -34,7 +36,9 @@ export class Content {
       ContentResponse[]
     >({
       path:
-        urlParams.size > 0 ? `/contents?${urlParams.toString()}` : '/contents',
+        urlParams.size > 0
+          ? `${TABNEWS_ENDPOINTS.content}?${urlParams.toString()}`
+          : TABNEWS_ENDPOINTS.content,
     });
 
     const links = parseLink(headers.get('link')!);

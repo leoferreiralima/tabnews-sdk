@@ -1,6 +1,8 @@
 import 'vitest-fetch-mock';
 
 import { expect, describe, it, vi } from 'vitest';
+
+import { TABNEWS_HEADERS } from './commons';
 import { TabNews } from './tabnews';
 
 describe('TabNews', () => {
@@ -60,7 +62,7 @@ describe('TabNews', () => {
 
     await tabNews.fetchRequest('/any_route');
 
-    expect(tabNews.headers.get('Cookie')).toBeNull();
+    expect(tabNews.headers.get(TABNEWS_HEADERS.cookie)).toBeNull();
   });
 
   it('should not create a new session id when dont has configuration', async () => {
@@ -77,7 +79,7 @@ describe('TabNews', () => {
 
     await tabNews.fetchRequest('/any_route');
 
-    expect(tabNews.headers.get('Cookie')).toBeNull();
+    expect(tabNews.headers.get(TABNEWS_HEADERS.cookie)).toBeNull();
   });
 
   it('should not create a new session id when dont has session', async () => {
@@ -99,7 +101,7 @@ describe('TabNews', () => {
 
     await tabNews.fetchRequest('/any_route');
 
-    expect(tabNews.headers.get('Cookie')).toBeNull();
+    expect(tabNews.headers.get(TABNEWS_HEADERS.cookie)).toBeNull();
   });
 
   it('should not create a new session id when session in not expired', async () => {
@@ -124,7 +126,7 @@ describe('TabNews', () => {
 
     await tabNews.fetchRequest('/any_route');
 
-    expect(tabNews.headers.get('Cookie')).toBeNull();
+    expect(tabNews.headers.get(TABNEWS_HEADERS.cookie)).toBeNull();
   });
 
   it('should not create a new session id when session in not expired', async () => {
@@ -149,7 +151,7 @@ describe('TabNews', () => {
 
     await tabNews.fetchRequest('/any_route');
 
-    expect(tabNews.headers.get('Cookie')).toBeNull();
+    expect(tabNews.headers.get(TABNEWS_HEADERS.cookie)).toBeNull();
   });
 
   it('should not create a new session id when call session.create()', async () => {
@@ -174,7 +176,7 @@ describe('TabNews', () => {
 
     await tabNews.session.create();
 
-    expect(tabNews.headers.get('Cookie')).toBeNull();
+    expect(tabNews.headers.get(TABNEWS_HEADERS.cookie)).toBeNull();
   });
 
   it('should create a new session id when session is expired', async () => {
@@ -206,6 +208,8 @@ describe('TabNews', () => {
 
     await tabNews.fetchRequest('/any_route');
 
-    expect(tabNews.headers.get('Cookie')).toBe('session_id=token123');
+    expect(tabNews.headers.get(TABNEWS_HEADERS.cookie)).toBe(
+      `${TABNEWS_HEADERS.sessionId}=token123`,
+    );
   });
 });

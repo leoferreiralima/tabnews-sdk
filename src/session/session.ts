@@ -1,14 +1,16 @@
-import { TabNews } from '../tabnews';
+import { TABNEWS_ENDPOINTS } from '@/commons';
+import { TabNews } from '@/tabnews';
+
 import { SessionResponse } from './interfaces';
 
 export class Session {
-  private session?: SessionResponse;
+  session?: SessionResponse;
 
   constructor(private readonly tabNews: TabNews) {}
 
   async create() {
     const { body } = await this.tabNews.post<SessionResponse>({
-      path: '/sessions',
+      path: TABNEWS_ENDPOINTS.session,
       body: {
         email: this.tabNews.config.credentials?.email,
         password: this.tabNews.config.credentials?.password,
@@ -22,7 +24,7 @@ export class Session {
 
   async destroy() {
     const { body } = await this.tabNews.delete<Omit<SessionResponse, 'token'>>({
-      path: '/sessions',
+      path: TABNEWS_ENDPOINTS.session,
     });
 
     this.session = undefined;

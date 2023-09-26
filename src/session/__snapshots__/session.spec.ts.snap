@@ -1,3 +1,24 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Session > create > should throw a tabnews error when api return error 1`] = `"\\"user\\" não possui \\"features\\" ou não é um array."`;
+exports[`Session > create > should create a session 1`] = `
+{
+  "created_at": 2023-09-12T11:56:13.379Z,
+  "expires_at": 2023-10-12T11:56:13.378Z,
+  "id": "123",
+  "token": "token123",
+  "updated_at": 2023-09-12T11:56:13.379Z,
+}
+`;
+
+exports[`Session > create > should throw a tabnews error when api return error 1`] = `"Dados não conferem."`;
+
+exports[`Session > destroy > should destroy a session 1`] = `
+{
+  "created_at": 2023-09-12T11:56:13.379Z,
+  "expires_at": 2023-10-12T11:56:13.378Z,
+  "id": "123",
+  "updated_at": 2023-09-12T11:56:13.379Z,
+}
+`;
+
+exports[`Session > destroy > should throw an error when has no session 1`] = `"Usuário não pode executar esta operação."`;

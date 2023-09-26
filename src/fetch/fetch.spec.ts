@@ -1,6 +1,7 @@
 import 'vitest-fetch-mock';
 
 import { expect, describe, it } from 'vitest';
+
 import { fetch } from './fetch';
 
 describe('fetch', () => {

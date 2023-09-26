@@ -1,15 +1,17 @@
 import { Headers } from 'cross-fetch';
 
-import fetch, { RequestConfig } from './fetch';
-import { TabNewsConfig } from './interfaces';
-import { Session } from './session';
-import { TabNewsApiError } from './commons/interfaces';
-import { TabNewsError } from './commons/errors';
-import { Content } from './content';
-import { User } from './user';
-
-const baseUrl =
-  process.env.TABNEWS_BASE_URL || 'https://www.tabnews.com.br/api/v1';
+import {
+  TABNEWS_BASE_URL,
+  TABNEWS_ENDPOINTS,
+  TABNEWS_HEADERS,
+  TabNewsApiError,
+  TabNewsError,
+} from '@/commons';
+import { Content } from '@/content';
+import fetch, { RequestConfig } from '@/fetch';
+import { TabNewsConfig } from '@/interfaces';
+import { Session } from '@/session';
+import { User } from '@/user';
 
 export class TabNews {
   readonly headers: Headers;
@@ -38,20 +40,27 @@ export class TabNews {
     { body, ...options }: Omit<RequestConfig, 'path'> = {},
   ) {
     const isCreateSession =
-      path.includes('/sessions') && 'POST' === options.method;
+      path.includes(TABNEWS_ENDPOINTS.session) && 'POST' === options.method;
 
     const shouldRenovateSession =
       !isCreateSession &&
       this.isCredentialsConfigured() &&
-      this.session.hasSession() &&
-      this.session.isExpired();
+      this.session.hasSession();
 
     if (shouldRenovateSession) {
-      const session = await this.session.create();
-      this.headers.set('Cookie', `session_id=${session.token}`);
+      // TODO add a better solution later
+      const session = this.session.isExpired()
+        ? await this.session.create()
+        : this.session.session;
+      if (session) {
+        this.headers.set(
+          TABNEWS_HEADERS.cookie,
+          `${TABNEWS_HEADERS.sessionId}=${session.token}`,
+        );
+      }
     }
 
-    const response = await fetch(`${baseUrl}${path}`, {
+    const response = await fetch(`${TABNEWS_BASE_URL}${path}`, {
       headers: this.headers,
       body,
       ...options,

@@ -2,14 +2,14 @@ export interface TabNewsApiError {
   name: string;
   message: string;
   action: string;
-  statusCode: number;
+  status_code: number;
   stack?: string;
-  errorId?: string;
-  requestId?: string;
+  error_id?: string;
+  request_id?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: any;
-  errorLocationCode?: string;
+  error_location_code?: string;
   key?: string;
   type?: string;
-  databaseErrorCode?: string;
+  database_error_code?: string;
 }
