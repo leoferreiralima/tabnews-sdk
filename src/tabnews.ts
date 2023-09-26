@@ -6,6 +6,7 @@ import { Session } from './session';
 import { TabNewsApiError } from './commons/interfaces';
 import { TabNewsError } from './commons/errors';
 import { Content } from './content';
+import { User } from './user';
 
 const baseUrl =
   process.env.TABNEWS_BASE_URL || 'https://www.tabnews.com.br/api/v1';
@@ -15,6 +16,7 @@ export class TabNews {
 
   readonly session = new Session(this);
   readonly content = new Content(this);
+  readonly user = new User(this);
 
   constructor(readonly config: Partial<TabNewsConfig> = {}) {
     if (!config.credentials) {
