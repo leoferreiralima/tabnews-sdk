@@ -110,9 +110,25 @@ const tabNews = new TabNews();
 const { contents } = await tabNews.contents.getAll();
 ```
 
+### Usuário
+
+A api de usuários permite que buscar dados do usuário logado, atualizar e listar.
+
+**Buscar usuário logado**
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+await tabNews.session.create();
+
+const user = await tabNews.user.me();
+```
+
 ### Conteúdos
 
-A api conteúdos de conteúdos permite lista todos os posts/comentários dentro
+A api conteúdos permite listar todos os posts/comentários dentro
 do tabnews, alguns dos exemplos de como interagir com essa api está abaixo:
 
 **Buscar Conteúdos**
