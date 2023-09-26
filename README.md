@@ -173,6 +173,8 @@ import { TabNews } from 'tabnews-sdk';
 
 const tabNews = new TabNews();
 
+await tabNews.session.create();
+
 const response = await tabNews.contents.create({
   parent_id: undefined,
   slug: 'e-opcional',
@@ -189,6 +191,8 @@ import { TabNews } from 'tabnews-sdk';
 const tabNews = new TabNews();
 
 const { contents } = await tabNews.contents.getAll();
+
+await tabNews.session.create();
 
 const response = await tabNews.contents.create({
   parent_id: contents[0].id,
