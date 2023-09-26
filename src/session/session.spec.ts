@@ -1,7 +1,7 @@
 import 'vitest-fetch-mock';
 
 import { expect, describe, it, afterEach, beforeEach, vi } from 'vitest';
-import { TabNews } from '../tabnews';
+import { TabNews } from '@/tabnews';
 
 let tabNews: TabNews;
 

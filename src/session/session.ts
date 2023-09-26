@@ -1,4 +1,4 @@
-import { TabNews } from '../tabnews';
+import { TabNews } from '@/tabnews';
 import { SessionResponse } from './interfaces';
 
 export class Session {

@@ -1,5 +1,5 @@
-import { TabNews } from '../tabnews';
-import { parseLink } from '../utils';
+import { TabNews } from '@/tabnews';
+import { parseLink } from '@/utils';
 import {
   ContentPagination,
   ContentResponse,

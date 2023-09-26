@@ -1,7 +1,7 @@
 import 'vitest-fetch-mock';
 
 import { expect, describe, it, afterEach, beforeEach } from 'vitest';
-import { TabNews } from '../tabnews';
+import { TabNews } from '@/tabnews';
 import { GetContentParams } from './interfaces';
 
 let tabNews: TabNews;
