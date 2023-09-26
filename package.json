@@ -1,7 +1,7 @@
 {
   "name": "tabnews-sdk",
   "version": "1.0.0",
-  "description": "Node.js library to interacte with TabNews API",
+  "description": "Node.js library to interact with TabNews API",
   "main": "build/src/index.js",
   "typings": "build/src/index.d.ts",
   "files": [

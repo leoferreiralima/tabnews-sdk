@@ -1,5 +1,6 @@
 import { TabNews } from '@/tabnews';
 import { SessionResponse } from './interfaces';
+import { TABNEWS_ENDPOINTS } from '@/commons';
 
 export class Session {
   session?: SessionResponse;
@@ -8,7 +9,7 @@ export class Session {
 
   async create() {
     const { body } = await this.tabNews.post<SessionResponse>({
-      path: '/sessions',
+      path: TABNEWS_ENDPOINTS.session,
       body: {
         email: this.tabNews.config.credentials?.email,
         password: this.tabNews.config.credentials?.password,
@@ -22,7 +23,7 @@ export class Session {
 
   async destroy() {
     const { body } = await this.tabNews.delete<Omit<SessionResponse, 'token'>>({
-      path: '/sessions',
+      path: TABNEWS_ENDPOINTS.session,
     });
 
     this.session = undefined;

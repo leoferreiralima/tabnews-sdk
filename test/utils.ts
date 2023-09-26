@@ -5,6 +5,7 @@ import { MockParams } from 'vitest-fetch-mock';
 import { TabNewsApiError } from '@/commons/interfaces';
 import { TabNewsConfig } from '@/interfaces';
 import { expect } from 'vitest';
+import { TABNEWS_ENDPOINTS } from '@/commons';
 
 export const DEFAULT_TABNEWS_CONFIG: Partial<TabNewsConfig> = {
   credentials: {
@@ -52,7 +53,7 @@ export const DEFAULT_SESSION = {
 export function mockOnceSession(
   session: typeof DEFAULT_SESSION = DEFAULT_SESSION,
 ) {
-  mockOnceResponse('/sessions', session);
+  mockOnceResponse(TABNEWS_ENDPOINTS.session, session);
 }
 
 export function mockedRequests() {

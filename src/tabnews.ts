@@ -3,13 +3,14 @@ import { Headers } from 'cross-fetch';
 import fetch, { RequestConfig } from './fetch';
 import { TabNewsConfig } from './interfaces';
 import { Session } from './session';
-import { TabNewsApiError } from './commons/interfaces';
-import { TabNewsError } from './commons/errors';
 import { Content } from './content';
 import { User } from './user';
-
-const baseUrl =
-  process.env.TABNEWS_BASE_URL || 'https://www.tabnews.com.br/api/v1';
+import {
+  TABNEWS_BASE_URL,
+  TABNEWS_ENDPOINTS,
+  TabNewsApiError,
+  TabNewsError,
+} from './commons';
 
 export class TabNews {
   readonly headers: Headers;
@@ -38,7 +39,7 @@ export class TabNews {
     { body, ...options }: Omit<RequestConfig, 'path'> = {},
   ) {
     const isCreateSession =
-      path.includes('/sessions') && 'POST' === options.method;
+      path.includes(TABNEWS_ENDPOINTS.session) && 'POST' === options.method;
 
     const shouldRenovateSession =
       !isCreateSession &&
@@ -55,7 +56,7 @@ export class TabNews {
       }
     }
 
-    const response = await fetch(`${baseUrl}${path}`, {
+    const response = await fetch(`${TABNEWS_BASE_URL}${path}`, {
       headers: this.headers,
       body,
       ...options,

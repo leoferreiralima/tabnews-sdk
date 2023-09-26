@@ -12,12 +12,13 @@ import {
   mockedRequest,
   resetMocks,
 } from '@test/utils';
+import { TABNEWS_ENDPOINTS } from '@/commons';
 
 let tabNews: TabNews;
 
 describe('Session', () => {
   const mockDestroySession = () =>
-    mockOnceResponse('/sessions', {
+    mockOnceResponse(TABNEWS_ENDPOINTS.session, {
       id: '123',
       expires_at: '2023-10-12T11:56:13.378Z',
       created_at: '2023-09-12T11:56:13.379Z',
@@ -51,7 +52,7 @@ describe('Session', () => {
     });
 
     it('should throw a tabnews error when api return error', async () => {
-      mockOnceApiError('/sessions', {
+      mockOnceApiError(TABNEWS_ENDPOINTS.session, {
         name: 'UnauthorizedError',
         message: 'Dados não conferem.',
         action: 'Verifique se os dados enviados estão corretos.',
@@ -88,7 +89,7 @@ describe('Session', () => {
     });
 
     it('should throw an error when has no session', async () => {
-      mockOnceApiError('/sessions', {
+      mockOnceApiError(TABNEWS_ENDPOINTS.session, {
         name: 'ForbiddenError',
         message: 'Usuário não pode executar esta operação.',
         action: 'Verifique se este usuário possui a feature "read:session".',

@@ -1,9 +1,7 @@
-import 'vitest-fetch-mock';
-
 import { expect, describe, it, afterEach, beforeEach } from 'vitest';
 import { TabNews } from '@/tabnews';
 import { GetContentParams } from './interfaces';
-import { createTabNews } from '@test/utils';
+import { createTabNews, resetMocks } from '@test/utils';
 
 let tabNews: TabNews;
 
@@ -23,11 +21,11 @@ describe('Content', () => {
   });
 
   afterEach(() => {
-    fetchMock.resetMocks();
+    resetMocks();
   });
 
   describe('get', () => {
-    it('should return all contents and paginagiton', async () => {
+    it('should return all contents and pagination', async () => {
       fetchMock.mockOnce(
         JSON.stringify([
           {

@@ -8,13 +8,14 @@ import {
   CreateContentResponse,
   GetContentParams,
 } from './interfaces';
+import { TABNEWS_ENDPOINTS } from '@/commons';
 
 export class Content {
   constructor(private readonly tabNews: TabNews) {}
 
   async create(contentBody: CreateContent) {
     const { body: content } = await this.tabNews.post<CreateContentResponse>({
-      path: '/contents',
+      path: TABNEWS_ENDPOINTS.content,
       body: contentBody,
     });
 
@@ -34,7 +35,9 @@ export class Content {
       ContentResponse[]
     >({
       path:
-        urlParams.size > 0 ? `/contents?${urlParams.toString()}` : '/contents',
+        urlParams.size > 0
+          ? `${TABNEWS_ENDPOINTS.content}?${urlParams.toString()}`
+          : TABNEWS_ENDPOINTS.content,
     });
 
     const links = parseLink(headers.get('link')!);
