@@ -2,8 +2,8 @@
   "name": "tabnews-sdk",
   "version": "1.0.0",
   "description": "Node.js library to interact with TabNews API",
-  "main": "build/src/index.js",
-  "typings": "build/src/index.d.ts",
+  "main": "build/index.js",
+  "typings": "build/index.d.ts",
   "files": [
     "build/"
   ],
@@ -12,7 +12,7 @@
   },
   "scripts": {
     "prepare": "husky install",
-    "build": "tsc -p ./tsconfig.publish.json",
+    "build": "tsc -p ./tsconfig.publish.json && resolve-tspaths",
     "lint": "eslint .",
     "format": "prettier --write .",
     "commit": "cz",
@@ -50,6 +50,7 @@
     "husky": "^8.0.3",
     "lint-staged": "^14.0.1",
     "prettier": "^3.0.3",
+    "resolve-tspaths": "^0.8.15",
     "typescript": "^5.2.2",
     "vitest": "^0.34.4",
     "vitest-fetch-mock": "^0.2.2"
