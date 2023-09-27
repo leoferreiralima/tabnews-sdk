@@ -3,11 +3,13 @@ import { TabNews } from '@/tabnews';
 import { parseLink } from '@/utils';
 
 import {
+  ContentDetailResponse,
   ContentPagination,
   ContentResponse,
   ContentStrategy,
   CreateContent,
   CreateContentResponse,
+  GetContentListParams,
   GetContentParams,
 } from './interfaces';
 
@@ -23,7 +25,7 @@ export class Content {
     return content;
   }
 
-  async getAll({ username, ...params }: GetContentParams = {}) {
+  async getAll({ username, ...params }: GetContentListParams = {}) {
     const urlParams = new URLSearchParams();
 
     Object.entries(params).forEach(([key, value]) => {
@@ -62,9 +64,26 @@ export class Content {
     };
   }
 
-  async getMy(params: Omit<GetContentParams, 'username'> = {}) {
+  async getMy(params: Omit<GetContentListParams, 'username'> = {}) {
     const { username } = await this.tabNews.user.me();
 
     return await this.getAll({ username, ...params });
+  }
+
+  async getBySlug(params: GetContentParams) {
+    const { body: content } = await this.tabNews.get<ContentDetailResponse>({
+      path: await this.getUrlForSlugAndUsername(params),
+    });
+
+    return content;
+  }
+
+  private async getUrlForSlugAndUsername({ slug, username }: GetContentParams) {
+    if (username) {
+      return `${TABNEWS_ENDPOINTS.content}/${username}/${slug}`;
+    }
+    const { username: currentUser } = await this.tabNews.user.me();
+
+    return `${TABNEWS_ENDPOINTS.content}/${currentUser}/${slug}`;
   }
 }

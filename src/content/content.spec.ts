@@ -15,7 +15,7 @@ import {
   resetMocks,
 } from '@test/utils';
 
-import { GetContentParams } from './interfaces';
+import { GetContentListParams } from './interfaces';
 
 let tabNews: TabNews;
 
@@ -28,6 +28,8 @@ const lastPageLinkHeader =
   '<https://www.tabnews.com.br/api/v1/contents?strategy=relevant&page=1&per_page=30>; rel="first", ' +
   '<https://www.tabnews.com.br/api/v1/contents?strategy=relevant&page=5&per_page=30>; rel="prev", ' +
   '<https://www.tabnews.com.br/api/v1/contents?strategy=relevant&page=6&per_page=30>; rel="last"';
+
+const username = DEFAULT_USER.username;
 
 const content = {
   id: 'id',
@@ -42,8 +44,13 @@ const content = {
   published_at: '2023-09-19T12:16:04.837Z',
   deleted_at: null,
   tabcoins: 1,
-  owner_username: 'username',
+  owner_username: username,
   children_deep_count: 2,
+};
+
+const contentDetail = {
+  ...content,
+  body: 'body',
 };
 
 describe('Content', () => {
@@ -71,7 +78,14 @@ describe('Content', () => {
       );
     };
 
-    it('should return all contents and pagination', async () => {
+    const mockContent = (slug: string, user: string = username) => {
+      mockOnceResponse(
+        `${TABNEWS_ENDPOINTS.content}/${user}/${slug}`,
+        contentDetail,
+      );
+    };
+
+    it('should get all contents and pagination', async () => {
       mockContents(linkHeader);
 
       const response = await tabNews.content.getAll();
@@ -99,7 +113,7 @@ describe('Content', () => {
     });
 
     it('should send all content params correctly', async () => {
-      const paramsList: GetContentParams[] = [
+      const paramsList: GetContentListParams[] = [
         {
           page: 2,
           per_page: 10,
@@ -134,7 +148,7 @@ describe('Content', () => {
       expectRequest(third).query('strategy').toBe('old');
     });
 
-    it('should return all contents for a specific user', async () => {
+    it('should get all contents for a specific user', async () => {
       const username = 'username';
       mockContents(linkHeader, username);
 
@@ -150,10 +164,10 @@ describe('Content', () => {
       expectRequest(request).method.toBeGet();
     });
 
-    it('should return all contents for current user', async () => {
+    it('should get all contents for current user', async () => {
       mockOnceCurrentUser();
 
-      mockContents(linkHeader, DEFAULT_USER.username);
+      mockContents(linkHeader, username);
 
       const response = await tabNews.content.getMy();
 
@@ -165,7 +179,7 @@ describe('Content', () => {
       expectRequest(request).method.toBeGet();
     });
 
-    it('should return error when parameter is invalid', () => {
+    it('should throw an error when parameter is invalid', () => {
       mockOnceApiError(TABNEWS_ENDPOINTS.content, {
         name: 'ValidationError',
         message: '"page" deve possuir um valor mínimo de 1.',
@@ -181,6 +195,63 @@ describe('Content', () => {
       expect(() =>
         tabNews.content.getAll({
           page: 0,
+        }),
+      ).rejects.toThrowErrorMatchingSnapshot();
+    });
+
+    it('should get content by slug', async () => {
+      const slug = 'slug';
+
+      mockContent(slug);
+
+      const content = await tabNews.content.getBySlug({
+        slug,
+        username,
+      });
+
+      expect(content).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBeGet();
+    });
+
+    it('should get content by slug for current user', async () => {
+      const slug = 'slug';
+
+      mockOnceCurrentUser();
+
+      mockContent(slug);
+
+      const content = await tabNews.content.getBySlug({
+        slug,
+      });
+
+      expect(content).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBeGet();
+    });
+
+    it('should throw an error when content not found', () => {
+      const slug = 'slug';
+
+      mockOnceApiError(`${TABNEWS_ENDPOINTS.content}/${username}/${slug}`, {
+        name: 'NotFoundError',
+        message: 'O conteúdo informado não foi encontrado no sistema.',
+        action: 'Verifique se o "slug" está digitado corretamente.',
+        status_code: 404,
+        error_id: '3ea15e67-97c8-4671-916f-0344934c8300',
+        request_id: '11815650-d56e-4b90-97dd-dcdf23df8412',
+        error_location_code: 'CONTROLLER:CONTENT:GET_HANDLER:SLUG_NOT_FOUND',
+        key: 'slug',
+      });
+
+      expect(() =>
+        tabNews.content.getBySlug({
+          slug,
+          username,
         }),
       ).rejects.toThrowErrorMatchingSnapshot();
     });

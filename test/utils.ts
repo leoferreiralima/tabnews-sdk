@@ -106,6 +106,8 @@ const parseCookie = (cookie: string | null) =>
         );
 
 export function expectRequest(request: Request) {
+  expect(request, 'request must be called').toBeDefined();
+
   const url = new URL(request.url);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

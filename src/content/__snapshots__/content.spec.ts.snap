@@ -21,7 +21,7 @@ exports[`Content > create > should create content 1`] = `
 
 exports[`Content > create > should throw an error when create content with invalid parameters 1`] = `"\\"body\\" possui o valor inválido \\"null\\"."`;
 
-exports[`Content > get > should return all contents and pagination 1`] = `
+exports[`Content > get > should get all contents and pagination 1`] = `
 {
   "first_page": 1,
   "last_page": 6,
@@ -34,7 +34,7 @@ exports[`Content > get > should return all contents and pagination 1`] = `
 }
 `;
 
-exports[`Content > get > should return all contents and pagination 2`] = `
+exports[`Content > get > should get all contents and pagination 2`] = `
 [
   {
     "children_deep_count": 2,
@@ -55,7 +55,7 @@ exports[`Content > get > should return all contents and pagination 2`] = `
 ]
 `;
 
-exports[`Content > get > should return all contents for a specific user 1`] = `
+exports[`Content > get > should get all contents for a specific user 1`] = `
 {
   "first_page": 1,
   "last_page": 6,
@@ -68,7 +68,7 @@ exports[`Content > get > should return all contents for a specific user 1`] = `
 }
 `;
 
-exports[`Content > get > should return all contents for a specific user 2`] = `
+exports[`Content > get > should get all contents for a specific user 2`] = `
 [
   {
     "children_deep_count": 2,
@@ -89,7 +89,7 @@ exports[`Content > get > should return all contents for a specific user 2`] = `
 ]
 `;
 
-exports[`Content > get > should return all contents for current user 1`] = `
+exports[`Content > get > should get all contents for current user 1`] = `
 {
   "first_page": 1,
   "last_page": 6,
@@ -102,7 +102,7 @@ exports[`Content > get > should return all contents for current user 1`] = `
 }
 `;
 
-exports[`Content > get > should return all contents for current user 2`] = `
+exports[`Content > get > should get all contents for current user 2`] = `
 [
   {
     "children_deep_count": 2,
@@ -121,6 +121,46 @@ exports[`Content > get > should return all contents for current user 2`] = `
     "updated_at": 2023-09-19T12:16:04.812Z,
   },
 ]
+`;
+
+exports[`Content > get > should get content by slug 1`] = `
+{
+  "body": "body",
+  "children_deep_count": 2,
+  "created_at": 2023-09-19T12:16:04.812Z,
+  "deleted_at": null,
+  "id": "id",
+  "owner_id": "owner_id",
+  "owner_username": "username",
+  "parent_id": null,
+  "published_at": 2023-09-19T12:16:04.837Z,
+  "slug": "slug",
+  "source_url": "https://source.url.com/source",
+  "status": "published",
+  "tabcoins": 1,
+  "title": "title",
+  "updated_at": 2023-09-19T12:16:04.812Z,
+}
+`;
+
+exports[`Content > get > should get content by slug for current user 1`] = `
+{
+  "body": "body",
+  "children_deep_count": 2,
+  "created_at": 2023-09-19T12:16:04.812Z,
+  "deleted_at": null,
+  "id": "id",
+  "owner_id": "owner_id",
+  "owner_username": "username",
+  "parent_id": null,
+  "published_at": 2023-09-19T12:16:04.837Z,
+  "slug": "slug",
+  "source_url": "https://source.url.com/source",
+  "status": "published",
+  "tabcoins": 1,
+  "title": "title",
+  "updated_at": 2023-09-19T12:16:04.812Z,
+}
 `;
 
 exports[`Content > get > should return correct page when is last page 1`] = `
@@ -157,4 +197,6 @@ exports[`Content > get > should return correct page when is last page 2`] = `
 ]
 `;
 
-exports[`Content > get > should return error when parameter is invalid 1`] = `"\\"page\\" deve possuir um valor mínimo de 1."`;
+exports[`Content > get > should throw an error when content not found 1`] = `"O conteúdo informado não foi encontrado no sistema."`;
+
+exports[`Content > get > should throw an error when parameter is invalid 1`] = `"\\"page\\" deve possuir um valor mínimo de 1."`;

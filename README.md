@@ -250,3 +250,30 @@ const response = await tabNews.contents.create({
   status: 'published',
 });
 ```
+
+**Buscar Detalhe do Conteúdo**
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+const content = await tabNews.contents.getBySlug({
+  slug: '<slug>',
+  username: '<username>',
+});
+```
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+await tabNews.session.create();
+
+// Não é preciso passar o username pois internamente a bliblioteca ira realizar o fecth do usuario atual
+
+const content = await tabNews.contents.getBySlug({
+  slug: '<slug>',
+});
+```
