@@ -8,18 +8,44 @@ import {
   ContentResponse,
   ContentStrategy,
   CreateContent,
-  CreateContentResponse,
   GetContentListParams,
   GetContentParams,
+  UpdateContent,
 } from './interfaces';
 
 export class Content {
   constructor(private readonly tabNews: TabNews) {}
 
   async create(contentBody: CreateContent) {
-    const { body: content } = await this.tabNews.post<CreateContentResponse>({
+    const { body: content } = await this.tabNews.post<ContentDetailResponse>({
       path: TABNEWS_ENDPOINTS.content,
       body: contentBody,
+    });
+
+    return content;
+  }
+
+  async update({ username, ...contentUpdate }: UpdateContent) {
+    const { body: content } = await this.tabNews.patch<ContentDetailResponse>({
+      path: await this.getUrlForSlugAndUsername({
+        slug: contentUpdate.slug,
+        username,
+      }),
+      body: contentUpdate,
+    });
+
+    return content;
+  }
+
+  async delete({ username, slug }: GetContentParams) {
+    const { body: content } = await this.tabNews.patch<ContentDetailResponse>({
+      path: await this.getUrlForSlugAndUsername({
+        slug,
+        username,
+      }),
+      body: {
+        status: 'deleted',
+      },
     });
 
     return content;

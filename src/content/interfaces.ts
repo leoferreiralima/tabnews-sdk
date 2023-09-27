@@ -46,23 +46,6 @@ export interface CreateContent {
   source_url?: string;
 }
 
-export interface CreateContentResponse {
-  id: string;
-  owner_id: string;
-  owner_username: string;
-  parent_id?: string;
-  slug: string;
-  title?: string;
-  status: CreateContentStatus;
-  body: string;
-  source_url?: string;
-  created_at: Date;
-  updated_at: Date;
-  published_at?: Date;
-  deleted_at?: Date;
-  tabcoins: number;
-}
-
 export interface GetContentParams {
   slug: string;
   username?: string;
@@ -71,3 +54,11 @@ export interface GetContentParams {
 export interface ContentDetailResponse extends ContentResponse {
   body: string;
 }
+
+export type UpdateContent = Partial<
+  Omit<CreateContent, 'parent_id' | 'slug' | 'status'>
+> & {
+  slug: string;
+  status?: ContentStatus;
+  username?: string;
+};

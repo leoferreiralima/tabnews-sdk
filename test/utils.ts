@@ -118,6 +118,7 @@ export function expectRequest(request: Request) {
   const toBePost = () => request.method === 'POST';
   const toBeGet = () => request.method === 'GET';
   const toBeDelete = () => request.method === 'DELETE';
+  const toBePatch = () => request.method === 'PATCH';
 
   const header = (headerName: string) => ({
     toBe: (headerValue: string) =>
@@ -150,6 +151,7 @@ export function expectRequest(request: Request) {
       toBePost,
       toBeGet,
       toBeDelete,
+      toBePatch,
     },
     header,
     query,
