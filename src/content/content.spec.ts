@@ -132,6 +132,13 @@ describe('Content', () => {
       );
     };
 
+    const mockParentContent = (slug: string, user: string = username) => {
+      mockOnceResponse(
+        `${TABNEWS_ENDPOINTS.content}/${user}/${slug}/parent`,
+        contentDetail,
+      );
+    };
+
     it('should get all contents and pagination', async () => {
       mockContents(linkHeader);
 
@@ -325,9 +332,9 @@ describe('Content', () => {
 
       mockOnceCurrentUser();
 
-      mockContent(slug);
+      mockContentChildren(slug);
 
-      const content = await tabNews.content.getBySlug({
+      const content = await tabNews.content.getChildren({
         slug,
       });
 
@@ -357,6 +364,66 @@ describe('Content', () => {
 
       expect(() =>
         tabNews.content.getChildren({
+          slug,
+          username,
+        }),
+      ).rejects.toThrowErrorMatchingSnapshot();
+    });
+
+    it('should get parent content', async () => {
+      const slug = 'slug';
+
+      mockParentContent(slug);
+
+      const content = await tabNews.content.getParent({
+        slug,
+        username,
+      });
+
+      expect(content).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBeGet();
+    });
+
+    it('should get parent content for current user', async () => {
+      const slug = 'slug';
+
+      mockOnceCurrentUser();
+
+      mockParentContent(slug);
+
+      const content = await tabNews.content.getParent({
+        slug,
+      });
+
+      expect(content).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBeGet();
+    });
+
+    it('should throw an error when content of parent not found', () => {
+      const slug = 'slug';
+
+      mockOnceApiError(
+        `${TABNEWS_ENDPOINTS.content}/${username}/${slug}/parent`,
+        {
+          name: 'NotFoundError',
+          message: 'O conteúdo informado não foi encontrado no sistema.',
+          action: 'Verifique se o "slug" está digitado corretamente.',
+          status_code: 404,
+          error_id: '3ea15e67-97c8-4671-916f-0344934c8300',
+          request_id: '11815650-d56e-4b90-97dd-dcdf23df8412',
+          error_location_code: 'CONTROLLER:CONTENT:GET_HANDLER:SLUG_NOT_FOUND',
+          key: 'slug',
+        },
+      );
+
+      expect(() =>
+        tabNews.content.getParent({
           slug,
           username,
         }),

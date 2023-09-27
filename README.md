@@ -267,6 +267,33 @@ const contentChildren = await tabNews.contents.getChildren({
 });
 ```
 
+**Buscar Conteúdo Pai**
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+const parentContent = await tabNews.contents.getParent({
+  slug: '<slug>',
+  username: '<username>',
+});
+```
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+await tabNews.session.create();
+
+// Não é preciso passar o username pois internamente a bliblioteca ira realizar o fecth do usuario atual
+
+const parentContent = await tabNews.contents.getParent({
+  slug: '<slug>',
+});
+```
+
 **Criar Conteúdo**
 
 Na rota de criação de conteúdos, todos os campos são opcionais exceto o `body`,
