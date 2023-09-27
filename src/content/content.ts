@@ -7,6 +7,8 @@ import {
   ContentPagination,
   ContentResponse,
   ContentStrategy,
+  ContentTabcoinsParams,
+  ContentTabcoinsResponse,
   CreateContent,
   GetContentListParams,
   GetContentParams,
@@ -49,6 +51,46 @@ export class Content {
     });
 
     return content;
+  }
+
+  async tabcoins({ username, slug, transaction_type }: ContentTabcoinsParams) {
+    const url = await this.getUrlForSlugAndUsername({
+      slug,
+      username,
+    });
+
+    const { body: tabcoins } = await this.tabNews.post<ContentTabcoinsResponse>(
+      {
+        path: `${url}/tabcoins`,
+        body: {
+          transaction_type,
+        },
+      },
+    );
+
+    return tabcoins;
+  }
+
+  async upVote({
+    username,
+    slug,
+  }: Omit<ContentTabcoinsParams, 'transaction_type'>) {
+    return await this.tabcoins({
+      username,
+      slug,
+      transaction_type: 'credit',
+    });
+  }
+
+  async downVote({
+    username,
+    slug,
+  }: Omit<ContentTabcoinsParams, 'transaction_type'>) {
+    return await this.tabcoins({
+      username,
+      slug,
+      transaction_type: 'debit',
+    });
   }
 
   async getAll({ username, ...params }: GetContentListParams = {}) {

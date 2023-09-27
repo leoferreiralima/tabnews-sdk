@@ -146,6 +146,15 @@ describe('Content', () => {
       );
     };
 
+    const mockTabCoins = (slug: string, user: string = username) => {
+      mockOnceResponse(
+        `${TABNEWS_ENDPOINTS.content}/${user}/${slug}/tabcoins`,
+        {
+          tabcoins: 13,
+        },
+      );
+    };
+
     it('should get all contents and pagination', async () => {
       mockContents(linkHeader);
 
@@ -495,6 +504,139 @@ describe('Content', () => {
           username,
         }),
       ).rejects.toThrowErrorMatchingSnapshot();
+    });
+
+    it('should update tabcoins', async () => {
+      const slug = 'slug';
+
+      mockTabCoins(slug);
+
+      const tabcoins = await tabNews.content.tabcoins({
+        slug,
+        username,
+        transaction_type: 'credit',
+      });
+
+      expect(tabcoins).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBePost();
+    });
+
+    it('should update tabcoins for current user', async () => {
+      const slug = 'slug';
+
+      mockOnceCurrentUser();
+
+      mockTabCoins(slug);
+
+      const tabcoins = await tabNews.content.tabcoins({
+        slug,
+        transaction_type: 'credit',
+      });
+
+      expect(tabcoins).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBePost();
+    });
+
+    it('should throw an error when content of tabcoins not found', () => {
+      const slug = 'slug';
+
+      mockOnceApiError(
+        `${TABNEWS_ENDPOINTS.content}/${username}/${slug}/tabcoins`,
+        {
+          name: 'NotFoundError',
+          message: 'O conteúdo informado não foi encontrado no sistema.',
+          action: 'Verifique se o "slug" está digitado corretamente.',
+          status_code: 404,
+          error_id: '3ea15e67-97c8-4671-916f-0344934c8300',
+          request_id: '11815650-d56e-4b90-97dd-dcdf23df8412',
+          error_location_code: 'CONTROLLER:CONTENT:GET_HANDLER:SLUG_NOT_FOUND',
+          key: 'slug',
+        },
+      );
+
+      expect(() =>
+        tabNews.content.tabcoins({
+          slug,
+          username,
+          transaction_type: 'credit',
+        }),
+      ).rejects.toThrowErrorMatchingSnapshot();
+    });
+
+    it('should up vote tabcoins', async () => {
+      const slug = 'slug';
+
+      mockTabCoins(slug);
+
+      const tabcoins = await tabNews.content.upVote({
+        slug,
+        username,
+      });
+
+      expect(tabcoins).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBePost();
+    });
+
+    it('should up vote tabcoins for current user', async () => {
+      const slug = 'slug';
+
+      mockOnceCurrentUser();
+
+      mockTabCoins(slug);
+
+      const tabcoins = await tabNews.content.upVote({
+        slug,
+      });
+
+      expect(tabcoins).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBePost();
+    });
+
+    it('should down vote tabcoins', async () => {
+      const slug = 'slug';
+
+      mockTabCoins(slug);
+
+      const tabcoins = await tabNews.content.downVote({
+        slug,
+        username,
+      });
+
+      expect(tabcoins).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBePost();
+    });
+
+    it('should down vote tabcoins for current user', async () => {
+      const slug = 'slug';
+
+      mockOnceCurrentUser();
+
+      mockTabCoins(slug);
+
+      const tabcoins = await tabNews.content.downVote({
+        slug,
+      });
+
+      expect(tabcoins).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBePost();
     });
   });
 
