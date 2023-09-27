@@ -19,7 +19,7 @@ export interface ContentResponse {
   children_deep_count: number;
 }
 
-export interface GetContentParams {
+export interface GetContentListParams {
   username?: string;
   page?: number;
   per_page?: number;
@@ -61,4 +61,13 @@ export interface CreateContentResponse {
   published_at?: Date;
   deleted_at?: Date;
   tabcoins: number;
+}
+
+export interface GetContentParams {
+  slug: string;
+  username?: string;
+}
+
+export interface ContentDetailResponse extends ContentResponse {
+  body: string;
 }
