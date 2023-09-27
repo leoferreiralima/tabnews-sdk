@@ -62,3 +62,7 @@ export type UpdateContent = Partial<
   status?: ContentStatus;
   username?: string;
 };
+
+export interface ContentChildrenResponse extends ContentDetailResponse {
+  children: ContentChildrenResponse[];
+}

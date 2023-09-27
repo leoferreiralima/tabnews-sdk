@@ -104,6 +104,17 @@ export class Content {
     return content;
   }
 
+  async getChildren(params: GetContentParams) {
+    const url = await this.getUrlForSlugAndUsername(params);
+
+    const { body: contentChildren } =
+      await this.tabNews.get<ContentDetailResponse>({
+        path: `${url}/children`,
+      });
+
+    return contentChildren;
+  }
+
   private async getUrlForSlugAndUsername({ slug, username }: GetContentParams) {
     if (username) {
       return `${TABNEWS_ENDPOINTS.content}/${username}/${slug}`;
