@@ -277,3 +277,65 @@ const content = await tabNews.contents.getBySlug({
   slug: '<slug>',
 });
 ```
+
+**Atualizar Conteúdo**
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+const content = await tabNews.contents.update({
+  slug: '<slug>',
+  username: '<username>',
+  title: 'title',
+  body: 'body',
+  status: 'published',
+  source_url: 'https://some.url',
+});
+```
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+await tabNews.session.create();
+
+// Não é preciso passar o username pois internamente a bliblioteca ira realizar o fecth do usuario atual
+
+const content = await tabNews.contents.update({
+  slug: '<slug>',
+  title: 'title',
+  body: 'body',
+  status: 'published',
+  source_url: 'https://some.url',
+});
+```
+
+**Deletar Conteúdo**
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+const content = await tabNews.contents.delete({
+  slug: '<slug>',
+  username: '<username>',
+});
+```
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+await tabNews.session.create();
+
+// Não é preciso passar o username pois internamente a bliblioteca ira realizar o fecth do usuario atual
+
+const content = await tabNews.contents.delete({
+  slug: '<slug>',
+});
+```

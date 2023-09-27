@@ -15,7 +15,7 @@ import {
   resetMocks,
 } from '@test/utils';
 
-import { GetContentListParams } from './interfaces';
+import { GetContentListParams, UpdateContent } from './interfaces';
 
 let tabNews: TabNews;
 
@@ -54,6 +54,13 @@ const contentDetail = {
 };
 
 describe('Content', () => {
+  const mockContent = (slug: string, user: string = username) => {
+    mockOnceResponse(
+      `${TABNEWS_ENDPOINTS.content}/${user}/${slug}`,
+      contentDetail,
+    );
+  };
+
   beforeEach(() => {
     tabNews = createTabNews();
   });
@@ -75,13 +82,6 @@ describe('Content', () => {
             [TABNEWS_HEADERS.paginationTotalRows]: '175',
           },
         },
-      );
-    };
-
-    const mockContent = (slug: string, user: string = username) => {
-      mockOnceResponse(
-        `${TABNEWS_ENDPOINTS.content}/${user}/${slug}`,
-        contentDetail,
       );
     };
 
@@ -328,6 +328,144 @@ describe('Content', () => {
           body: 'invalid',
           status: 'draft',
           source_url: 'https://google.com',
+        }),
+      ).rejects.toThrowErrorMatchingSnapshot();
+    });
+  });
+
+  describe('update', () => {
+    it('should update content', async () => {
+      const slug = 'slug';
+
+      mockContent(slug);
+
+      const updateContent: UpdateContent = {
+        slug,
+        title: 'title',
+        body: 'body',
+        status: 'published',
+        source_url: 'https://google.com',
+      };
+
+      const content = await tabNews.content.update({
+        username,
+        ...updateContent,
+      });
+
+      expect(content).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBePatch();
+      expectRequest(request).body.toBe(updateContent);
+    });
+
+    it('should update content for current user', async () => {
+      const slug = 'slug';
+
+      mockOnceCurrentUser();
+
+      mockContent(slug);
+
+      const updateContent: UpdateContent = {
+        slug,
+        title: 'title',
+        body: 'body',
+        status: 'published',
+        source_url: 'https://google.com',
+      };
+
+      const content = await tabNews.content.update(updateContent);
+
+      expect(content).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBePatch();
+      expectRequest(request).body.toBe(updateContent);
+    });
+
+    it('should throw a api erro when content not found', () => {
+      const slug = 'slug';
+
+      mockOnceApiError(`${TABNEWS_ENDPOINTS.content}/${username}/${slug}`, {
+        name: 'NotFoundError',
+        message: 'O conteúdo informado não foi encontrado no sistema.',
+        action: 'Verifique se o "slug" está digitado corretamente.',
+        status_code: 404,
+        error_id: '4504533d-6dda-43c1-854d-2d7ddd49ab31',
+        request_id: '1345cace-8cdf-4200-ad4d-5c0975d35fb8',
+        error_location_code: 'CONTROLLER:CONTENT:PATCH_HANDLER:SLUG_NOT_FOUND',
+        key: 'slug',
+      });
+
+      expect(() =>
+        tabNews.content.update({
+          slug,
+          username,
+        }),
+      ).rejects.toThrowErrorMatchingSnapshot();
+    });
+  });
+
+  describe('delete', () => {
+    it('should delete content', async () => {
+      const slug = 'slug';
+
+      mockContent(slug);
+
+      const content = await tabNews.content.delete({
+        slug,
+        username,
+      });
+
+      expect(content).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBePatch();
+      expectRequest(request).body.toBe({
+        status: 'deleted',
+      });
+    });
+
+    it('should delete content for current user', async () => {
+      const slug = 'slug';
+
+      mockOnceCurrentUser();
+
+      mockContent(slug);
+
+      const content = await tabNews.content.delete({ slug });
+
+      expect(content).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBePatch();
+      expectRequest(request).body.toBe({
+        status: 'deleted',
+      });
+    });
+
+    it('should throw a api erro when content not found', () => {
+      const slug = 'slug';
+
+      mockOnceApiError(`${TABNEWS_ENDPOINTS.content}/${username}/${slug}`, {
+        name: 'NotFoundError',
+        message: 'O conteúdo informado não foi encontrado no sistema.',
+        action: 'Verifique se o "slug" está digitado corretamente.',
+        status_code: 404,
+        error_id: '4504533d-6dda-43c1-854d-2d7ddd49ab31',
+        request_id: '1345cace-8cdf-4200-ad4d-5c0975d35fb8',
+        error_location_code: 'CONTROLLER:CONTENT:PATCH_HANDLER:SLUG_NOT_FOUND',
+        key: 'slug',
+      });
+
+      expect(() =>
+        tabNews.content.delete({
+          slug,
+          username,
         }),
       ).rejects.toThrowErrorMatchingSnapshot();
     });

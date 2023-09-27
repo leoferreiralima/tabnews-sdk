@@ -107,6 +107,16 @@ export class TabNews {
     return await this.fetchRequest<T>(path, requestOptions);
   }
 
+  async patch<T>({ path, body, ...options }: RequestConfig) {
+    const requestOptions = {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+      ...options,
+    };
+
+    return await this.fetchRequest<T>(path, requestOptions);
+  }
+
   private isCredentialsConfigured() {
     return (
       !!this.config.credentials?.email && !!this.config.credentials?.password
