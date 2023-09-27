@@ -321,6 +321,50 @@ const rootContent = await tabNews.contents.getRoot({
 });
 ```
 
+**Up or Down Vote Conteúdo**
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+const tabcoins1 = await tabNews.contents.tabcoins({
+  slug: '<slug>',
+  username: '<username>',
+  transaction_type: 'credit',
+});
+
+// or
+
+const tabcoins2 = await tabNews.contents.upVote({
+  slug: '<slug>',
+  username: '<username>',
+});
+```
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+await tabNews.session.create();
+
+// Não é preciso passar o username pois internamente a bliblioteca ira realizar o fecth do usuario atual
+
+const tabcoins1 = await tabNews.contents.tabcoins({
+  slug: '<slug>',
+  username: '<username>',
+  transaction_type: 'debit',
+});
+
+// or
+
+const tabcoins2 = await tabNews.contents.downVote({
+  slug: '<slug>',
+  username: '<username>',
+});
+```
+
 **Criar Conteúdo**
 
 Na rota de criação de conteúdos, todos os campos são opcionais exceto o `body`,

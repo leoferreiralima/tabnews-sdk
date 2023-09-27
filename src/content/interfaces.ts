@@ -66,3 +66,11 @@ export type UpdateContent = Partial<
 export interface ContentChildrenResponse extends ContentDetailResponse {
   children: ContentChildrenResponse[];
 }
+
+export interface ContentTabcoinsParams extends GetContentParams {
+  transaction_type: 'credit' | 'debit';
+}
+
+export interface ContentTabcoinsResponse {
+  tabcoins: number;
+}

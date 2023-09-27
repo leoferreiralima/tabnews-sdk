@@ -63,6 +63,18 @@ exports[`Content > delete > should delete content for current user 1`] = `
 
 exports[`Content > delete > should throw a api erro when content not found 1`] = `"O conteúdo informado não foi encontrado no sistema."`;
 
+exports[`Content > get > should down vote tabcoins 1`] = `
+{
+  "tabcoins": 13,
+}
+`;
+
+exports[`Content > get > should down vote tabcoins for current user 1`] = `
+{
+  "tabcoins": 13,
+}
+`;
+
 exports[`Content > get > should get all contents and pagination 1`] = `
 {
   "first_page": 1,
@@ -411,7 +423,33 @@ exports[`Content > get > should throw an error when content of parent not found 
 
 exports[`Content > get > should throw an error when content of root not found 1`] = `"O conteúdo informado não foi encontrado no sistema."`;
 
+exports[`Content > get > should throw an error when content of tabcoins not found 1`] = `"O conteúdo informado não foi encontrado no sistema."`;
+
 exports[`Content > get > should throw an error when parameter is invalid 1`] = `"\\"page\\" deve possuir um valor mínimo de 1."`;
+
+exports[`Content > get > should up vote tabcoins 1`] = `
+{
+  "tabcoins": 13,
+}
+`;
+
+exports[`Content > get > should up vote tabcoins for current user 1`] = `
+{
+  "tabcoins": 13,
+}
+`;
+
+exports[`Content > get > should update tabcoins 1`] = `
+{
+  "tabcoins": 13,
+}
+`;
+
+exports[`Content > get > should update tabcoins for current user 1`] = `
+{
+  "tabcoins": 13,
+}
+`;
 
 exports[`Content > update > should throw a api erro when content not found 1`] = `"O conteúdo informado não foi encontrado no sistema."`;
 
