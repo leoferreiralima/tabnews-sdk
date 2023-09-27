@@ -53,6 +53,46 @@ const contentDetail = {
   body: 'body',
 };
 
+const contentChildren = [
+  {
+    id: 'id',
+    parent_id: 'parent_id',
+    owner_id: 'owner_id',
+    slug: 'slug',
+    title: null,
+    body: 'body',
+    status: 'published',
+    source_url: null,
+    published_at: '2023-04-02T12:25:34.865Z',
+    created_at: '2023-04-02T12:25:34.810Z',
+    updated_at: '2023-04-02T12:25:34.810Z',
+    deleted_at: null,
+    owner_username: 'username',
+    tabcoins: 0,
+    children: [
+      {
+        id: 'id',
+        parent_id: 'parent_id',
+        owner_id: 'owner_id',
+        slug: 'slug',
+        title: null,
+        body: 'body',
+        status: 'published',
+        source_url: null,
+        published_at: '2023-04-02T12:25:34.865Z',
+        created_at: '2023-04-02T12:25:34.810Z',
+        updated_at: '2023-04-02T12:25:34.810Z',
+        deleted_at: null,
+        owner_username: 'username',
+        tabcoins: 1,
+        children: [],
+        children_deep_count: 0,
+      },
+    ],
+    children_deep_count: 1,
+  },
+];
+
 describe('Content', () => {
   const mockContent = (slug: string, user: string = username) => {
     mockOnceResponse(
@@ -82,6 +122,13 @@ describe('Content', () => {
             [TABNEWS_HEADERS.paginationTotalRows]: '175',
           },
         },
+      );
+    };
+
+    const mockContentChildren = (slug: string, user: string = username) => {
+      mockOnceResponse(
+        `${TABNEWS_ENDPOINTS.content}/${user}/${slug}/children`,
+        contentChildren,
       );
     };
 
@@ -250,6 +297,66 @@ describe('Content', () => {
 
       expect(() =>
         tabNews.content.getBySlug({
+          slug,
+          username,
+        }),
+      ).rejects.toThrowErrorMatchingSnapshot();
+    });
+
+    it('should get content children', async () => {
+      const slug = 'slug';
+
+      mockContentChildren(slug);
+
+      const content = await tabNews.content.getChildren({
+        slug,
+        username,
+      });
+
+      expect(content).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBeGet();
+    });
+
+    it('should get content children for current user', async () => {
+      const slug = 'slug';
+
+      mockOnceCurrentUser();
+
+      mockContent(slug);
+
+      const content = await tabNews.content.getBySlug({
+        slug,
+      });
+
+      expect(content).toMatchSnapshot();
+
+      const request = mockedRequest();
+
+      expectRequest(request).method.toBeGet();
+    });
+
+    it('should throw an error when content of content children not found', () => {
+      const slug = 'slug';
+
+      mockOnceApiError(
+        `${TABNEWS_ENDPOINTS.content}/${username}/${slug}/children`,
+        {
+          name: 'NotFoundError',
+          message: 'O conteúdo informado não foi encontrado no sistema.',
+          action: 'Verifique se o "slug" está digitado corretamente.',
+          status_code: 404,
+          error_id: '3ea15e67-97c8-4671-916f-0344934c8300',
+          request_id: '11815650-d56e-4b90-97dd-dcdf23df8412',
+          error_location_code: 'CONTROLLER:CONTENT:GET_HANDLER:SLUG_NOT_FOUND',
+          key: 'slug',
+        },
+      );
+
+      expect(() =>
+        tabNews.content.getChildren({
           slug,
           username,
         }),

@@ -213,6 +213,60 @@ const { pagination, contents } = await tabNews.contents.getMy({
 });
 ```
 
+**Buscar Detalhe do Conteúdo**
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+const content = await tabNews.contents.getBySlug({
+  slug: '<slug>',
+  username: '<username>',
+});
+```
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+await tabNews.session.create();
+
+// Não é preciso passar o username pois internamente a bliblioteca ira realizar o fecth do usuario atual
+
+const content = await tabNews.contents.getBySlug({
+  slug: '<slug>',
+});
+```
+
+**Buscar Comentarios do Conteúdo**
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+const contentChildren = await tabNews.contents.getChildren({
+  slug: '<slug>',
+  username: '<username>',
+});
+```
+
+```js
+import { TabNews } from 'tabnews-sdk';
+
+const tabNews = new TabNews();
+
+await tabNews.session.create();
+
+// Não é preciso passar o username pois internamente a bliblioteca ira realizar o fecth do usuario atual
+
+const contentChildren = await tabNews.contents.getChildren({
+  slug: '<slug>',
+});
+```
+
 **Criar Conteúdo**
 
 Na rota de criação de conteúdos, todos os campos são opcionais exceto o `body`,
@@ -248,33 +302,6 @@ const response = await tabNews.contents.create({
   parent_id: contents[0].id,
   body: 'comentando em um conteúdo',
   status: 'published',
-});
-```
-
-**Buscar Detalhe do Conteúdo**
-
-```js
-import { TabNews } from 'tabnews-sdk';
-
-const tabNews = new TabNews();
-
-const content = await tabNews.contents.getBySlug({
-  slug: '<slug>',
-  username: '<username>',
-});
-```
-
-```js
-import { TabNews } from 'tabnews-sdk';
-
-const tabNews = new TabNews();
-
-await tabNews.session.create();
-
-// Não é preciso passar o username pois internamente a bliblioteca ira realizar o fecth do usuario atual
-
-const content = await tabNews.contents.getBySlug({
-  slug: '<slug>',
 });
 ```
 
