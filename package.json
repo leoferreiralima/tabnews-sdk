@@ -12,7 +12,7 @@
   },
   "scripts": {
     "prepare": "husky install",
-    "build": "tsc -p .",
+    "build": "tsc -p ./tsconfig.publish.json",
     "lint": "eslint .",
     "format": "prettier --write .",
     "commit": "cz",
