@@ -6,7 +6,7 @@ import { TABNEWS_HEADERS } from './commons';
 import { TabNews } from './tabnews';
 
 describe('TabNews', () => {
-  it('should instantiate without and without env', () => {
+  it('should instantiate without credentials and without env', () => {
     const tabNews = new TabNews();
 
     expect(tabNews.config.credentials?.email).toBeUndefined();
@@ -23,17 +23,6 @@ describe('TabNews', () => {
     expect(tabNews.config.credentials?.password).toBe('env_dummy_password');
 
     vi.unstubAllEnvs();
-  });
-
-  it('should instantiate with config', () => {
-    const tabNews = new TabNews({
-      credentials: {
-        email: 'test@email.com',
-        password: 'dummy_password',
-      },
-    });
-    expect(tabNews.config.credentials?.email).toBe('test@email.com');
-    expect(tabNews.config.credentials?.password).toBe('dummy_password');
   });
 
   it('should instantiate with config', () => {
